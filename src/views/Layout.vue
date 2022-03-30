@@ -35,8 +35,7 @@
         :pinned.sync="pinned"
         :icon="icon"
         :logo="logo"
-        :disabled-routes="[]"
-        expand-on-hover
+        :disabled-routes="['dashboard']"
       >
         <template #header-expanded>
           <portal-target name="sidebar-header-expanded" />
@@ -74,7 +73,7 @@
         />
 
         <portal-target
-          name="report-toolbar"
+          name="privacy-toolbar"
         />
       </div>
     </main>
