@@ -74,6 +74,7 @@ export default (options = {}) => {
       'general',
       'navigation',
       'notification',
+      'request',
     ),
     // Any additional options we want to merge
     ...options,

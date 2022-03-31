@@ -73,7 +73,7 @@
         />
 
         <portal-target
-          name="privacy-toolbar"
+          name="editor-toolbar"
         />
       </div>
     </main>
@@ -85,6 +85,8 @@ import { components } from '@cortezaproject/corteza-vue'
 const { CTopbar, CSidebar } = components
 
 export default {
+  name: 'Layout',
+
   components: {
     CTopbar,
     CSidebar,

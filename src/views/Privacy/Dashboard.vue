@@ -1,7 +1,7 @@
 <template>
   <b-container
     fluid
-    class="d-flex flex-column px-3 pt-3"
+    class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
       Data Privacy Console
@@ -26,7 +26,7 @@
         >
           <b-card
             :title="option.title"
-            class="option shadow"
+            class="card-hover-popup shadow"
           >
             <b-card-text>
               {{ option.description }}
@@ -63,6 +63,8 @@
 
 <script>
 export default {
+  name: 'Dashboard',
+
   data () {
     return {
       options: [
@@ -92,14 +94,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.option {
-  transition: all 0.1s ease-in-out;
-
-  &:hover {
-    box-shadow: 0 4px 8px rgba(38, 38, 38, 0.2);
-    transform: translate3d(0, -2px, 0);
-  }
-}
-</style>

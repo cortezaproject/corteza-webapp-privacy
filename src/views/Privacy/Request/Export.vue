@@ -1,16 +1,17 @@
 <template>
   <b-container
     fluid
-    class="d-flex flex-column px-3 pt-3"
+    class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
-      Data Deletion Request
+      Data Export Request
     </portal>
   </b-container>
 </template>
 
 <script>
 export default {
+  name: 'RequestExport',
 
 }
 </script>

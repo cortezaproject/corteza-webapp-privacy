@@ -3,8 +3,16 @@ import {
   faGripHorizontal,
   faThumbtack,
   faHome,
+  faChevronLeft,
   faChevronRight,
   faThLarge,
+  faCheck,
+  faTimes,
+  faAngleLeft,
+  faAngleRight,
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+  faSearch,
 } from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -18,6 +26,14 @@ library.add(
   faUser,
   faThumbtack,
   faQuestionCircle,
+  faChevronLeft,
   faChevronRight,
   faGripHorizontal,
+  faCheck,
+  faTimes,
+  faAngleLeft,
+  faAngleRight,
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+  faSearch,
 )

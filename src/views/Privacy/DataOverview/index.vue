@@ -1,7 +1,7 @@
 <template>
   <b-container
     fluid
-    class="d-flex flex-column px-3 pt-3"
+    class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
       Data Overview
@@ -22,7 +22,7 @@
           >
             <b-card
               no-body
-              class="data-type pointer shadow"
+              class="card-hover-popup shadow pointer"
             >
               <b-row no-gutters>
                 <b-col
@@ -71,6 +71,8 @@
 
 <script>
 export default {
+  name: 'DataOverview',
+
   data () {
     return {
       dataTypes: [
@@ -82,7 +84,7 @@ export default {
         },
         {
           title: 'Application Data',
-          description: 'Your personal data store in Corteza',
+          description: 'Your personal data stored in Corteza',
           icon: ['fas', 'th-large'],
           to: { name: 'data-overview.application' },
         },
@@ -91,14 +93,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped>
-.data-type {
-  transition: all 0.1s ease-in-out;
-
-  &:hover {
-    box-shadow: 0 4px 8px rgba(38, 38, 38, 0.2);
-    transform: translate3d(0, -2px, 0);
-  }
-}
-</style>
