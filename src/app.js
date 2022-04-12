@@ -75,6 +75,7 @@ export default (options = {}) => {
       'navigation',
       'notification',
       'request',
+      'sensitive-data',
     ),
     // Any additional options we want to merge
     ...options,
