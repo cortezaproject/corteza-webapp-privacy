@@ -57,7 +57,15 @@
                 </b-col>
               </b-row>
 
+              <a
+                v-if="type.href"
+                :href="type.href"
+                target="_blank"
+                class="pointer stretched-link"
+              />
+
               <router-link
+                v-else-if="type.to"
                 :to="type.to"
                 class="pointer stretched-link"
               />
@@ -80,7 +88,7 @@ export default {
           title: 'Profile Information',
           description: 'Your contact information, names, surname, nickname, profile picture',
           icon: ['far', 'user'],
-          to: { name: 'data-overview.profile' },
+          href: this.$auth.cortezaAuthURL,
         },
         {
           title: 'Application Data',

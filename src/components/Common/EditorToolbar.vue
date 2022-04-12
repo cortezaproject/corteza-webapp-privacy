@@ -13,7 +13,7 @@
           variant="link"
           size="lg"
           :to="backLink"
-          class="d-flex align-items-center p-0 text-dark back"
+          class="d-flex align-items-center text-dark back"
         >
           <font-awesome-icon
             :icon="['fas', 'chevron-left']"

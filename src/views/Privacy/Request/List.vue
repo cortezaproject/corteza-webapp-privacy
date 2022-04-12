@@ -14,20 +14,25 @@
       :filter="filter"
       :sorting="sorting"
       :pagination="pagination"
+      clickable
       class="flex-grow-1"
       @search="filterList"
       @row-clicked="rowClicked"
     >
       <template #header="{ selected = [] }">
-        <b-button
+        <c-input-confirm
+          v-if="isDC"
           :disabled="processing || !selected.length"
+          :borderless="false"
           variant="primary"
           size="lg"
-          @click="handleSelectedRequests('approve')"
+          size-confirm="lg"
+          @confirmed="handleSelectedRequests('approve')"
         >
           Approve Requests
-        </b-button>
+        </c-input-confirm>
         <c-input-confirm
+          v-if="isDC"
           :disabled="processing || !selected.length"
           :borderless="false"
           variant="danger"
@@ -38,6 +43,16 @@
         >
           Reject Requests
         </c-input-confirm>
+
+        <b-button
+          v-else
+          :disabled="processing"
+          variant="light"
+          size="lg"
+          @click="exportRequests()"
+        >
+          Export
+        </b-button>
       </template>
 
       <template #status="{ item }">
@@ -79,30 +94,6 @@ export default {
 
   data () {
     return {
-      fields: [
-        {
-          key: 'name',
-          sortable: true,
-        },
-        {
-          key: 'requestedAt',
-          sortable: true,
-          formatter: (v) => moment(v).fromNow(),
-        },
-        {
-          key: 'requestedBy',
-          sortable: true,
-        },
-        {
-          key: 'status',
-          sortable: true,
-        },
-      ].map(c => ({
-        ...c,
-        // Generate column label translation key
-        label: c.label || this.$t(`columns.${c.key}`),
-      })),
-
       statusVariants: {
         pending: 'warning',
         rejected: 'danger',
@@ -111,11 +102,48 @@ export default {
     }
   },
 
+  computed: {
+    fields () {
+      return [
+        {
+          key: 'kind',
+          tdClass: 'text-capitalize',
+          sortable: true,
+          formatter: v => `${v} Request`,
+        },
+        {
+          key: 'requestedAt',
+          sortable: true,
+          formatter: v => moment(v).fromNow(),
+        },
+        {
+          hide: !this.isDC,
+          key: 'requestedBy',
+          sortable: true,
+        },
+        {
+          key: 'status',
+          sortable: true,
+        },
+      ].filter(({ hide }) => !hide)
+        .map(c => ({
+          ...c,
+          // Generate column label translation key
+          label: c.label || this.$t(`columns.${c.key}`),
+        }))
+    },
+
+    isDC () {
+      return false
+    },
+  },
+
   methods: {
     items () {
       const set = [
-        { requestID: '1', name: 'Foo', requestedAt: new Date(), requestedBy: '123', status: 'pending' },
-        { requestID: '2', name: 'Bar', requestedAt: new Date(), requestedBy: '123', status: 'pending' },
+        { requestID: '1', requestedAt: new Date(), requestedBy: '123', status: 'approved', kind: 'deletion' },
+        { requestID: '2', requestedAt: new Date(), requestedBy: '123', status: 'pending', kind: 'correction' },
+        { requestID: '3', requestedAt: new Date(), requestedBy: '123', status: 'rejected', kind: 'export' },
       ]
 
       const filter = {
@@ -134,8 +162,8 @@ export default {
       this.$root.$emit('bv::refresh::table', 'resource-list')
     },
 
-    rowClicked ({ item }) {
-      console.log(item)
+    rowClicked ({ requestID, kind }) {
+      this.$router.push({ name: 'request.view', params: { requestID, kind: 'deletion' } })
     },
   },
 }
