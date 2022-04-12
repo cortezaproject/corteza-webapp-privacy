@@ -6,12 +6,12 @@ export default [
     component: () => import('./Layout'),
     children: [
       { name: 'dashboard', path: '/dashboard', component: () => import('./Privacy/Dashboard') },
-      { name: 'data-overview', path: '/data-overview', component: () => import('./Privacy/DataOverview') },
-      { name: 'data-overview.profile', path: '/data-overview/profile', component: () => import('./Privacy/DataOverview/Profile') },
+      { name: 'sensitive-data', path: '/sensitive-data', component: () => import('./Privacy/SensitiveData') },
+      { name: 'data-overview', path: '/data-overview', component: () => import('./Privacy/DataOverview/') },
       { name: 'data-overview.application', path: '/data-overview/application', component: () => import('./Privacy/DataOverview/Application') },
       { name: 'request.list', path: '/request/list', component: () => import('./Privacy/Request/List') },
-      { name: 'request.export', path: '/request/export/:requestID?', component: () => import('./Privacy/Request/Export') },
-      { name: 'request.deletion', path: '/request/deletion/:requestID?', component: () => import('./Privacy/Request/Deletion') },
+      { name: 'request.view', path: '/request/:requestID?', component: () => import('./Privacy/Request/View'), props: true },
+      { name: 'request.create', path: '/request/:kind/new', component: () => import('./Privacy/Request/Create'), props: true },
     ],
   },
 

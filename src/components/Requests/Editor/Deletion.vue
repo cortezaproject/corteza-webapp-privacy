@@ -1,11 +1,5 @@
 <template>
-  <b-container
-    class="d-flex flex-column p-3"
-  >
-    <portal to="topbar-title">
-      Application Data
-    </portal>
-
+  <div>
     <b-card
       class="shadow mb-3"
     >
@@ -48,20 +42,37 @@
           label-class="text-primary"
           class="mb-0"
         >
-          <b-form-group
+          <b-row
             v-for="item in module.items"
             :key="item.label"
-            :label="item.label"
-            label-cols="12"
-            label-cols-lg="4"
-            class="ml-2 mb-1"
+            align-v="center"
+            class="mb-2"
           >
-            <div
-              class="py-2"
+            <b-col
+              cols="12"
+              lg="4"
             >
-              {{ item.value }}
-            </div>
-          </b-form-group>
+              <b-form-checkbox
+                v-model="item.selected"
+              >
+                {{ item.label }}
+              </b-form-checkbox>
+            </b-col>
+            <b-col
+              class="my-1"
+            >
+              <del
+                v-if="item.selected"
+              >
+                {{ item.value }}
+              </del>
+              <span
+                v-else
+              >
+                {{ item.value }}
+              </span>
+            </b-col>
+          </b-row>
         </b-form-group>
       </b-card>
     </div>
@@ -69,24 +80,16 @@
     <portal to="editor-toolbar">
       <editor-toolbar
         :processing="processing"
-        :back-link="{ name: 'data-overview' }"
+        :back-link="{ name: 'data-overview.application' }"
         submit-show
-        submit-label="Request Correction"
-        @submit="$router.push({ name: 'request.create', params: { kind: 'correction'} })"
+        submit-label="Delete Selected Data"
+        :submit-disabled="!datasource"
+        @submit="requestDeletion()"
       >
-        <template #right>
-          <b-button
-            :disabled="processing"
-            variant="danger"
-            size="lg"
-            :to="{ name: 'request.create', params: { kind: 'deletion'} }"
-          >
-            Request Deletion
-          </b-button>
-        </template>
+        <template #right />
       </editor-toolbar>
     </portal>
-  </b-container>
+  </div>
 </template>
 
 <script>
@@ -94,8 +97,6 @@ import EditorToolbar from 'corteza-webapp-privacy/src/components/Common/EditorTo
 import VueSelect from 'vue-select'
 
 export default {
-  name: 'ApplicationDataOverview',
-
   components: {
     EditorToolbar,
     VueSelect,
@@ -144,6 +145,12 @@ export default {
 
   created () {
     this.datasource = this.datasources[0]
+  },
+
+  methods: {
+    requestCorrection () {
+      this.$router.push({ name: 'request.view', params: { requestID: '1', kind: 'correction' } })
+    },
   },
 }
 </script>

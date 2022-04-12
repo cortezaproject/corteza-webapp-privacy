@@ -1,11 +1,5 @@
 <template>
-  <b-container
-    class="d-flex flex-column p-3"
-  >
-    <portal to="topbar-title">
-      Application Data
-    </portal>
-
+  <div>
     <b-card
       class="shadow mb-3"
     >
@@ -56,11 +50,9 @@
             label-cols-lg="4"
             class="ml-2 mb-1"
           >
-            <div
-              class="py-2"
-            >
-              {{ item.value }}
-            </div>
+            <b-form-input
+              v-model="item.value"
+            />
           </b-form-group>
         </b-form-group>
       </b-card>
@@ -69,24 +61,16 @@
     <portal to="editor-toolbar">
       <editor-toolbar
         :processing="processing"
-        :back-link="{ name: 'data-overview' }"
+        :back-link="{ name: 'data-overview.application' }"
         submit-show
-        submit-label="Request Correction"
-        @submit="$router.push({ name: 'request.create', params: { kind: 'correction'} })"
+        submit-label="Submit Correction Request"
+        :submit-disabled="!datasource"
+        @submit="requestCorrection()"
       >
-        <template #right>
-          <b-button
-            :disabled="processing"
-            variant="danger"
-            size="lg"
-            :to="{ name: 'request.create', params: { kind: 'deletion'} }"
-          >
-            Request Deletion
-          </b-button>
-        </template>
+        <template #right />
       </editor-toolbar>
     </portal>
-  </b-container>
+  </div>
 </template>
 
 <script>
@@ -94,8 +78,6 @@ import EditorToolbar from 'corteza-webapp-privacy/src/components/Common/EditorTo
 import VueSelect from 'vue-select'
 
 export default {
-  name: 'ApplicationDataOverview',
-
   components: {
     EditorToolbar,
     VueSelect,
@@ -144,6 +126,12 @@ export default {
 
   created () {
     this.datasource = this.datasources[0]
+  },
+
+  methods: {
+    requestCorrection () {
+      this.$router.push({ name: 'request.view', params: { requestID: '1', kind: 'correction' } })
+    },
   },
 }
 </script>
