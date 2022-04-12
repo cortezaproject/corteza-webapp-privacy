@@ -26,7 +26,7 @@
         >
           <b-card
             :title="option.title"
-            class="card-hover-popup shadow"
+            class="card-hover-popup shadow-sm"
           >
             <b-card-text>
               {{ option.description }}

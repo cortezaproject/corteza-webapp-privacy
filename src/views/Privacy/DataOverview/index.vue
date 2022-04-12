@@ -22,7 +22,7 @@
           >
             <b-card
               no-body
-              class="card-hover-popup shadow pointer"
+              class="card-hover-popup shadow-sm pointer"
             >
               <b-row no-gutters>
                 <b-col

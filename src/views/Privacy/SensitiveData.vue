@@ -16,7 +16,6 @@
       :pagination="pagination"
       class="flex-grow-1"
       @search="filterList"
-      @row-clicked="rowClicked"
     >
       <template #header="{ selected = [] }">
         <b-button

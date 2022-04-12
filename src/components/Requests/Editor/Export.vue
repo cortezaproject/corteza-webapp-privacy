@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card
-      class="shadow mb-3"
+      class="shadow-sm mb-3"
     >
       <b-form-group
         label="Data Type to export"

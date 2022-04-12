@@ -1,7 +1,7 @@
 <template>
   <b-card
     header-class="bg-white border-bottom"
-    class="shadow"
+    class="shadow-sm"
   >
     <portal to="topbar-title">
       <span

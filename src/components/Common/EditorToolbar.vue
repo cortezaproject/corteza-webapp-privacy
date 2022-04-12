@@ -1,7 +1,7 @@
 <template>
   <b-container
     fluid
-    class="bg-white shadow border-top p-3"
+    class="bg-white shadow-sm border-top p-3"
   >
     <b-row
       no-gutters

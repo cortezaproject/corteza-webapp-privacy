@@ -7,7 +7,7 @@
     </portal>
 
     <b-card
-      class="shadow mb-3"
+      class="shadow-sm mb-3"
     >
       <b-form-group
         label="Data Source"
@@ -33,7 +33,7 @@
         v-for="module in datasource.modules"
         :key="module.name"
         header-class="bg-white border-bottom"
-        class="shadow"
+        class="shadow-sm"
       >
         <template #header>
           <h5
