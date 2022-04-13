@@ -3,7 +3,7 @@
     <b-form-group
       v-for="data in request.data"
       :key="data.name"
-      :label="$t('employees')"
+      :label="data.name"
       label-class="text-primary"
     >
       <b-row
@@ -23,16 +23,16 @@
       </b-row>
     </b-form-group>
 
-    <b-form-group
+    <!-- <b-form-group
       :label="$t('request-comment')"
       label-class="text-primary"
     >
       <div
         class="ml-3"
       >
-        {{ $t('irrelevant-data') }}
+        This data is irrelevant for the employment status, please delete it.
       </div>
-    </b-form-group>
+    </b-form-group> -->
   </div>
 </template>
 

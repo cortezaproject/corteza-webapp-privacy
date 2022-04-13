@@ -4,20 +4,20 @@
       class="shadow-sm mb-3"
     >
       <b-form-group
-        :label="$t('data-type-export')"
+        :label="$t('data-type.label')"
         label-class="text-primary"
       >
         <b-form-checkbox
           v-model="exportFilter.profile"
           class="ml-2 mb-1"
         >
-          {{ $t('profile-information') }}
+          {{ $t('data-type.profile-information') }}
         </b-form-checkbox>
         <b-form-checkbox
           v-model="exportFilter.application"
           class="ml-2"
         >
-          {{ $t('application-data') }}
+          {{ $t('data-type.application-data') }}
         </b-form-checkbox>
       </b-form-group>
 
@@ -27,7 +27,7 @@
           lg="6"
         >
           <b-form-group
-            :label="$t('date-range')"
+            :label="$t('date-range.label')"
             label-class="text-primary"
           >
             <b-form-select
@@ -41,7 +41,7 @@
           lg="6"
         >
           <b-form-group
-            :label="$t('file-format')"
+            :label="$t('file-format.label')"
             label-class="text-primary"
           >
             <b-form-select
@@ -58,7 +58,7 @@
         :processing="processing"
         :back-link="{ name: 'data-overview.application' }"
         submit-show
-        :submit-label="$t('export-selected-data')"
+        :submit-label="$t('submit')"
         :submit-disabled="!(exportFilter.profile || exportFilter.application)"
         @submit="requestExport()"
       >
@@ -95,12 +95,12 @@ export default {
       },
 
       rangeOptions: [
-        { text: 'All of my data', value: 'all' },
+        { text: this.$t('date-range.all'), value: 'all' },
       ],
 
       formatOptions: [
-        { text: 'JSON', value: 'json' },
-        { text: 'CSV', value: 'csv' },
+        { text: this.$t('file-format.json'), value: 'json' },
+        { text: this.$t('file-format.csv'), value: 'csv' },
       ],
     }
   },

@@ -4,7 +4,7 @@
       <span
         class="text-capitalize"
       >
-        {{ $t('request-kind', { kind} ) }}
+        {{ $t(`request-kind.${kind}`) }}
       </span>
     </portal>
 

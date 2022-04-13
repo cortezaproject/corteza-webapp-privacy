@@ -4,7 +4,7 @@
       class="shadow-sm mb-3"
     >
       <b-form-group
-        :label="$t('data-source')"
+        :label="$t('data-source.label')"
         label-class="text-primary"
         class="mb-0"
       >
@@ -14,7 +14,7 @@
           :clearable="false"
           option-text="label"
           option-value="datasourceID"
-          :placeholder="$t('select-data-source')"
+          :placeholder="$t('data-source.placeholder')"
           class="h-100 bg-white"
         />
       </b-form-group>
@@ -82,7 +82,7 @@
         :processing="processing"
         :back-link="{ name: 'data-overview.application' }"
         submit-show
-        :submit-label="$t('delete-selected-data')"
+        :submit-label="$t('submit')"
         :submit-disabled="!datasource"
         @submit="requestDeletion()"
       >

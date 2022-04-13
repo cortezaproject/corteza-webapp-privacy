@@ -4,15 +4,15 @@
     class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
-      {{ $t('data-console') }}
+      {{ $t('title') }}
     </portal>
 
     <div
       class="flex-shrink-1"
     >
       <p>
-        {{ $t('description') }}<br>
-        {{ $t('actions') }}
+        {{ $t('description.first') }}<br>
+        {{ $t('description.second') }}
       </p>
 
       <b-row>
@@ -66,46 +66,45 @@ export default {
   name: 'Dashboard',
 
   i18nOptions: {
-    namespaces: 'general',
-    keyPrefix: 'dashboard',
+    namespaces: 'dashboard',
   },
 
   data () {
     return {
       userOptions: [
         {
-          title: 'Data Overview',
-          description: 'Morbi quis diam fermentum, luctus marius nnec, fringilla urnna. Nullam quis risus sit amet neque sodales',
-          button: { label: 'View your data', to: { name: 'data-overview' } },
+          title: this.$t('user-options.data-overview.title'),
+          description: this.$t('user-options.data-overview.description'),
+          button: { label: this.$t('user-options.data-overview.button-label'), to: { name: 'data-overview' } },
         },
         {
-          title: 'Privacy Requests',
-          description: 'Morbi quis diam fermentum, luctus marius nnec, fringilla urnna. Nullam quis risus sit amet neque sodales',
-          button: { label: 'Your privacy requests', to: { name: 'request.list' } },
+          title: this.$t('user-options.privacy-requests.title'),
+          description: this.$t('user-options.privacy-requests.description'),
+          button: { label: this.$t('user-options.privacy-requests.button-label'), to: { name: 'request.list' } },
         },
         {
-          title: 'Request Data Export',
-          description: 'Morbi quis diam fermentum, luctus marius nnec, fringilla urnna. Nullam quis risus sit amet neque sodales',
-          button: { label: 'Export your data', to: { name: 'request.create', params: { kind: 'export' } } },
+          title: this.$t('user-options.export.title'),
+          description: this.$t('user-options.export.description'),
+          button: { label: this.$t('user-options.export.button-label'), to: { name: 'request.create', params: { kind: 'export' } } },
         },
 
         {
-          title: 'Request Data Deletion',
-          description: 'Morbi quis diam fermentum, luctus marius nnec, fringilla urnna. Nullam quis risus sit amet neque sodales',
-          button: { label: 'Request data deletion', variant: 'danger', to: { name: 'request.create', params: { kind: 'deletion' } } },
+          title: this.$t('user-options.deletion.title'),
+          description: this.$t('user-options.deletion.description'),
+          button: { label: this.$t('user-options.deletion.button-label'), variant: 'danger', to: { name: 'request.create', params: { kind: 'deletion' } } },
         },
       ],
 
       dcOptions: [
         {
-          title: 'Privacy Requests',
-          description: 'Morbi quis diam fermentum, luctus marius nnec, fringilla urnna. Nullam quis risus sit amet neque sodales',
-          button: { label: 'Incoming privacy requests', to: { name: 'request.list' } },
+          title: this.$t('dc-options.privacy-requests.title'),
+          description: this.$t('dc-options.privacy-requests.description'),
+          button: { label: this.$t('dc-options.privacy-requests.button-label'), to: { name: 'request.list' } },
         },
         {
-          title: 'Sensitive Data',
-          description: 'Morbi quis diam fermentum, luctus marius nnec, fringilla urnna. Nullam quis risus sit amet neque sodales',
-          button: { label: 'List of sensitive data', to: { name: 'sensitive-data' } },
+          title: this.$t('dc-options.sensitive-data.title'),
+          description: this.$t('dc-options.sensitive-data.description'),
+          button: { label: this.$t('dc-options.sensitive-data.button-label'), to: { name: 'sensitive-data' } },
         },
       ],
     }

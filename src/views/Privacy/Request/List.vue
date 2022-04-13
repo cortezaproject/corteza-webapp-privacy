@@ -4,7 +4,7 @@
     class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
-      {{ $t('request.privacy') }}
+      {{ $t('title') }}
     </portal>
 
     <resource-list
@@ -109,7 +109,7 @@ export default {
           key: 'kind',
           tdClass: 'text-capitalize',
           sortable: true,
-          formatter: v => `${v} Request`,
+          formatter: v => this.$t(`request-kind.${v}`),
         },
         {
           key: 'requestedAt',

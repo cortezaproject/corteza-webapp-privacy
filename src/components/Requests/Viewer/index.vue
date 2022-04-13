@@ -4,11 +4,7 @@
     class="shadow-sm"
   >
     <portal to="topbar-title">
-      <span
-        class="text-capitalize"
-      >
-        {{ $t('request-kind', { requestKind } ) }}
-      </span>
+      {{ $t(`request-kind.${request.kind}`) }}
     </portal>
 
     <template #header>
@@ -63,12 +59,6 @@ export default {
         approved: 'success',
       },
     }
-  },
-
-  computed: {
-    requestKind () {
-      return this.request.kind
-    },
   },
 }
 </script>

@@ -31,7 +31,7 @@ export default {
 
   i18nOptions: {
     namespaces: 'request',
-    keyPrefix: 'view.request',
+    keyPrefix: 'view',
   },
 
   components: {
@@ -91,6 +91,12 @@ export default {
           requestedBy: '123',
           status: 'rejected',
           kind: 'export',
+          data: {
+            profile: true,
+            application: true,
+            range: 'all',
+            format: 'json',
+          },
         },
       ],
     }

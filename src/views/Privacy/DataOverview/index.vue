@@ -4,7 +4,7 @@
     class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
-      {{ $t('label') }}
+      {{ $t('title') }}
     </portal>
 
     <b-row
@@ -89,14 +89,14 @@ export default {
     return {
       dataTypes: [
         {
-          title: 'Profile Information',
-          description: 'Your contact information, names, surname, nickname, profile picture',
+          title: this.$t('data-types.profile-information.title'),
+          description: this.$t('data-types.profile-information.description'),
           icon: ['far', 'user'],
           href: this.$auth.cortezaAuthURL,
         },
         {
-          title: 'Application Data',
-          description: 'Your personal data stored in Corteza',
+          title: this.$t('data-types.application-data.title'),
+          description: this.$t('data-types.application-data.description'),
           icon: ['fas', 'th-large'],
           to: { name: 'data-overview.application' },
         },
