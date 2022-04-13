@@ -4,7 +4,7 @@
     class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
-      Privacy Requests
+      {{ $t('request.privacy') }}
     </portal>
 
     <resource-list
@@ -29,7 +29,7 @@
           size-confirm="lg"
           @confirmed="handleSelectedRequests('approve')"
         >
-          Approve Requests
+          {{ $t('request.approve') }}
         </c-input-confirm>
         <c-input-confirm
           v-if="isDC"
@@ -41,7 +41,7 @@
           class="ml-1"
           @confirmed="handleSelectedRequests('reject')"
         >
-          Reject Requests
+          {{ $t('request.reject') }}
         </c-input-confirm>
 
         <b-button
@@ -51,7 +51,7 @@
           size="lg"
           @click="exportRequests()"
         >
-          Export
+          {{ $t('export') }}
         </b-button>
       </template>
 

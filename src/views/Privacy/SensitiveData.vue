@@ -4,7 +4,7 @@
     class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
-      Sensitive Data
+      {{ $t('title') }}
     </portal>
 
     <resource-list
@@ -24,7 +24,7 @@
           size="lg"
           @click="handleSelectedRequests('enable')"
         >
-          Enable modules
+          {{ $t('module.enable') }}
         </b-button>
         <c-input-confirm
           :disabled="processing || !selected.length"
@@ -35,7 +35,7 @@
           class="ml-1"
           @confirmed="handleSelectedRequests('disable')"
         >
-          Disable modules
+          {{ $t('module.disable') }}
         </c-input-confirm>
       </template>
     </resource-list>

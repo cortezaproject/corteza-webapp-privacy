@@ -4,20 +4,20 @@
       class="shadow-sm mb-3"
     >
       <b-form-group
-        label="Data Type to export"
+        :label="$t('data-type-export')"
         label-class="text-primary"
       >
         <b-form-checkbox
           v-model="exportFilter.profile"
           class="ml-2 mb-1"
         >
-          Profile Information
+          {{ $t('profile-information') }}
         </b-form-checkbox>
         <b-form-checkbox
           v-model="exportFilter.application"
           class="ml-2"
         >
-          Application Data
+          {{ $t('application-data') }}
         </b-form-checkbox>
       </b-form-group>
 
@@ -27,7 +27,7 @@
           lg="6"
         >
           <b-form-group
-            label="Date Range"
+            :label="$t('date-range')"
             label-class="text-primary"
           >
             <b-form-select
@@ -41,7 +41,7 @@
           lg="6"
         >
           <b-form-group
-            label="File Format"
+            :label="$t('file-format')"
             label-class="text-primary"
           >
             <b-form-select
@@ -58,7 +58,7 @@
         :processing="processing"
         :back-link="{ name: 'data-overview.application' }"
         submit-show
-        submit-label="Export Selected Data"
+        :submit-label="$t('export-selected-data')"
         :submit-disabled="!(exportFilter.profile || exportFilter.application)"
         @submit="requestExport()"
       >
@@ -73,6 +73,11 @@ import EditorToolbar from 'corteza-webapp-privacy/src/components/Common/EditorTo
 
 export default {
   name: 'ApplicationDataDeletion',
+
+  i18nOptions: {
+    namespaces: 'request',
+    keyPrefix: 'edit.export',
+  },
 
   components: {
     EditorToolbar,

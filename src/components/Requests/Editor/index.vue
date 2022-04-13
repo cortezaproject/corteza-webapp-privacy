@@ -4,7 +4,7 @@
       <span
         class="text-capitalize"
       >
-        New {{ kind }} request
+        {{ $t('request-kind', { kind} ) }}
       </span>
     </portal>
 
@@ -20,6 +20,11 @@ import Deletion from './Deletion'
 import Export from './Export'
 
 export default {
+  i18nOptions: {
+    namespaces: 'request',
+    keyPrefix: 'edit',
+  },
+
   components: {
     Correction,
     Deletion,

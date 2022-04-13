@@ -3,7 +3,7 @@
     <b-form-group
       v-for="data in request.data"
       :key="data.name"
-      label="Employees"
+      :label="$t('employees')"
       label-class="text-primary"
     >
       <b-row
@@ -24,13 +24,13 @@
     </b-form-group>
 
     <b-form-group
-      label="Request comment"
+      :label="$t('request-comment')"
       label-class="text-primary"
     >
       <div
         class="ml-3"
       >
-        This data is irrelevant for the employment status, please delete it.
+        {{ $t('irrelevant-data') }}
       </div>
     </b-form-group>
   </div>
@@ -41,5 +41,10 @@ import base from './base'
 
 export default {
   extends: base,
+
+  i18nOptions: {
+    namespaces: 'request',
+    keyPrefix: 'view.deletion',
+  },
 }
 </script>

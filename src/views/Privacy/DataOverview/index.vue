@@ -4,7 +4,7 @@
     class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
-      Data Overview
+      {{ $t('label') }}
     </portal>
 
     <b-row
@@ -80,6 +80,10 @@
 <script>
 export default {
   name: 'DataOverview',
+
+  i18nOptions: {
+    namespaces: 'data-overview',
+  },
 
   data () {
     return {

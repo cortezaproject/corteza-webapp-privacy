@@ -4,7 +4,7 @@
       class="shadow-sm mb-3"
     >
       <b-form-group
-        label="Data Source"
+        :label="$t('data-source')"
         label-class="text-primary"
         class="mb-0"
       >
@@ -14,7 +14,7 @@
           :clearable="false"
           option-text="label"
           option-value="datasourceID"
-          placeholder="Select a Data Source"
+          :placeholder="$t('select-data-source')"
           class="h-100 bg-white"
         />
       </b-form-group>
@@ -38,7 +38,7 @@
         </template>
 
         <b-form-group
-          label="Private Fields"
+          :label="$t('private-fields')"
           label-class="text-primary"
           class="mb-0"
         >
@@ -63,7 +63,7 @@
         :processing="processing"
         :back-link="{ name: 'data-overview.application' }"
         submit-show
-        submit-label="Submit Correction Request"
+        :submit-label="$t('submit-correction-request')"
         :submit-disabled="!datasource"
         @submit="requestCorrection()"
       >
@@ -78,6 +78,11 @@ import EditorToolbar from 'corteza-webapp-privacy/src/components/Common/EditorTo
 import VueSelect from 'vue-select'
 
 export default {
+  i18nOptions: {
+    namespaces: 'request',
+    keyPrefix: 'edit.correction',
+  },
+
   components: {
     EditorToolbar,
     VueSelect,

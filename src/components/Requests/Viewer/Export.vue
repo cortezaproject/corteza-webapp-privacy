@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form-group
-      label="Data Type"
+      :label="$t('data-type')"
       label-class="text-primary"
     >
       <span
@@ -12,7 +12,7 @@
     </b-form-group>
 
     <b-form-group
-      label="Date Range"
+      :label="$t('date-range')"
       label-class="text-primary"
     >
       <span
@@ -23,7 +23,7 @@
     </b-form-group>
 
     <b-form-group
-      label="File Format"
+      :label="$t('file-format')"
       label-class="text-primary"
     >
       <span
@@ -40,5 +40,10 @@ import base from './base'
 
 export default {
   extends: base,
+
+  i18nOptions: {
+    namespaces: 'request',
+    keyPrefix: 'view.export',
+  },
 }
 </script>

@@ -4,15 +4,15 @@
     class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
-      Data Privacy Console
+      {{ $t('data-console') }}
     </portal>
 
     <div
       class="flex-shrink-1"
     >
       <p>
-        The Data Privacy Console enables you to access the overview of your personal data, request data deletion or data export.<br>
-        These actions are subject to validation by the DC (Data Controller) of your organization.
+        {{ $t('description') }}<br>
+        {{ $t('actions') }}
       </p>
 
       <b-row>
@@ -49,7 +49,7 @@
       <h6
         class="text-primary"
       >
-        Location of your Data Storage
+        {{ $t('data-source-location') }}
       </h6>
 
       <b-img
@@ -64,6 +64,11 @@
 <script>
 export default {
   name: 'Dashboard',
+
+  i18nOptions: {
+    namespaces: 'general',
+    keyPrefix: 'dashboard',
+  },
 
   data () {
     return {

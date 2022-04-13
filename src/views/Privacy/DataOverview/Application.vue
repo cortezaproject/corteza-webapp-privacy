@@ -3,14 +3,14 @@
     class="d-flex flex-column p-3"
   >
     <portal to="topbar-title">
-      Application Data
+      {{ $t('title') }}
     </portal>
 
     <b-card
       class="shadow-sm mb-3"
     >
       <b-form-group
-        label="Data Source"
+        :label="$t('data-source')"
         label-class="text-primary"
         class="mb-0"
       >
@@ -20,7 +20,7 @@
           :clearable="false"
           option-text="label"
           option-value="datasourceID"
-          placeholder="Select a Data Source"
+          :placeholder="$t('select-data-source')"
           class="h-100 bg-white"
         />
       </b-form-group>
@@ -44,7 +44,7 @@
         </template>
 
         <b-form-group
-          label="Private Fields"
+          :label="$t('private-fields')"
           label-class="text-primary"
           class="mb-0"
         >
@@ -71,7 +71,7 @@
         :processing="processing"
         :back-link="{ name: 'data-overview' }"
         submit-show
-        submit-label="Request Correction"
+        :submit-label="$t('request-correction')"
         @submit="$router.push({ name: 'request.create', params: { kind: 'correction'} })"
       >
         <template #right>
@@ -81,7 +81,7 @@
             size="lg"
             :to="{ name: 'request.create', params: { kind: 'deletion'} }"
           >
-            Request Deletion
+            {{ $t('request-deletion') }}
           </b-button>
         </template>
       </editor-toolbar>
@@ -95,6 +95,11 @@ import VueSelect from 'vue-select'
 
 export default {
   name: 'ApplicationDataOverview',
+
+  i18nOptions: {
+    namespaces: 'data-overview',
+    keyPrefix: 'application',
+  },
 
   components: {
     EditorToolbar,

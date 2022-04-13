@@ -71,6 +71,7 @@ export default (options = {}) => {
     store,
     i18n: i18n(Vue,
       { app: 'corteza-webapp-privacy' },
+      'data-overview',
       'general',
       'navigation',
       'notification',

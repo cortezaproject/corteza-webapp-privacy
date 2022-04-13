@@ -7,7 +7,7 @@
       <span
         class="text-capitalize"
       >
-        Data {{ request.kind }} request
+        {{ $t('request-kind', { requestKind } ) }}
       </span>
     </portal>
 
@@ -42,6 +42,11 @@ import Deletion from './Deletion'
 import Export from './Export'
 
 export default {
+  i18nOptions: {
+    namespaces: 'request',
+    keyPrefix: 'view',
+  },
+
   components: {
     Correction,
     Deletion,
@@ -58,6 +63,12 @@ export default {
         approved: 'success',
       },
     }
+  },
+
+  computed: {
+    requestKind () {
+      return this.request.kind
+    },
   },
 }
 </script>

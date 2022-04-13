@@ -12,9 +12,9 @@
         :processing="processing"
         :back-link="{ name: 'request.list' }"
         :submit-show="isDC"
-        submit-label="Approve request"
+        :submit-label="$t('approve')"
         :delete-show="isDC"
-        delete-label="Reject request"
+        :delete-label="$t('reject')"
         @submit="requestCorrection()"
         @delete="requestDeletion()"
       />
@@ -31,7 +31,7 @@ export default {
 
   i18nOptions: {
     namespaces: 'request',
-    keyPrefix: 'view',
+    keyPrefix: 'view.request',
   },
 
   components: {
