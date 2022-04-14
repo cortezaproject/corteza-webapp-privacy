@@ -52,9 +52,7 @@
         {{ $t('data-source-location') }}
       </h6>
 
-      <b-img
-        src="https://i.pinimg.com/originals/8d/14/d4/8d14d49d7b1c4cf696cca2649d353796.png"
-        fluid
+      <datasource-map
         class="align-self-center justify-self-center flex-grow-1"
       />
     </div>
@@ -62,11 +60,17 @@
 </template>
 
 <script>
+import DatasourceMap from 'corteza-webapp-privacy/src/components/DatasourceMap'
+
 export default {
   name: 'Dashboard',
 
   i18nOptions: {
     namespaces: 'dashboard',
+  },
+
+  components: {
+    DatasourceMap,
   },
 
   data () {
