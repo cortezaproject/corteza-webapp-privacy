@@ -96,31 +96,22 @@ export default {
 
       datasources: [
         {
-          label: 'Primary Database (Owned by ACME LTD and Located in Ireland',
           datasourceID: '1',
-          modules: [
-            {
-              name: 'Employees',
-              items: [
-                { label: 'Gender', value: 'Female' },
-                { label: 'Education', value: 'Master of Business Administration' },
-                { label: 'Address', value: 'Foo Bar Street' },
-                { label: 'Civil Status', value: 'Married' },
-              ],
-            },
-          ],
+          label: 'Primary Data Source',
+          location: 'Ireland',
+          ownership: 'ACME Ltd.',
+          modules: [],
         },
         {
-          label: 'Secondary Database (Owned by ASGR LTD and Located in France',
           datasourceID: '2',
+          label: 'Primary Data Lake',
+          location: 'Switzerland',
+          ownership: 'ACME Ltd.',
           modules: [
             {
-              name: 'Employees',
+              name: 'Demo',
               items: [
-                { label: 'Gender', value: 'Female' },
-                { label: 'Education', value: 'Master of Business Administration' },
-                { label: 'Address', value: 'Bar Foo Street' },
-                { label: 'Civil Status', value: 'Married' },
+                { label: 'Text', value: 'Foo' },
               ],
             },
           ],

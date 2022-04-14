@@ -141,9 +141,9 @@ export default {
   methods: {
     items () {
       const set = [
-        { requestID: '1', requestedAt: new Date(), requestedBy: '123', status: 'approved', kind: 'deletion' },
-        { requestID: '2', requestedAt: new Date(), requestedBy: '123', status: 'pending', kind: 'correction' },
-        { requestID: '3', requestedAt: new Date(), requestedBy: '123', status: 'rejected', kind: 'export' },
+        { requestID: '1', requestedAt: new Date(), requestedBy: 'John Doe', status: 'approved', kind: 'correction' },
+        { requestID: '2', requestedAt: new Date(), requestedBy: 'John Doe', status: 'rejected', kind: 'deletion' },
+        { requestID: '3', requestedAt: new Date(), requestedBy: 'John Doe', status: 'rejected', kind: 'export' },
       ]
 
       const filter = {

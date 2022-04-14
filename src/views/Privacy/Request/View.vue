@@ -15,8 +15,8 @@
         :submit-label="$t('approve')"
         :delete-show="isDC"
         :delete-label="$t('reject')"
-        @submit="requestCorrection()"
-        @delete="requestDeletion()"
+        @submit="$router.push({ name: 'request.list' })"
+        @delete="$router.push({ name: 'request.list' })"
       />
     </portal>
   </b-container>
@@ -58,14 +58,13 @@ export default {
           requestID: '1',
           requestedAt: new Date(),
           requestedBy: '123',
-          status: 'approved',
-          kind: 'deletion',
+          status: 'pending',
+          kind: 'correction',
           data: [
             {
-              name: 'Employees',
+              name: 'Demo',
               items: [
-                { label: 'Gender', value: 'Female' },
-                { label: 'Civil Status', value: 'Married' },
+                { label: 'Text', value: 'Bar' },
               ],
             },
           ],
@@ -75,12 +74,12 @@ export default {
           requestedAt: new Date(),
           requestedBy: '123',
           status: 'pending',
-          kind: 'correction',
+          kind: 'deletion',
           data: [
             {
-              name: 'Employees',
+              name: 'Demo',
               items: [
-                { label: 'Civil Status', value: 'Single' },
+                { label: 'Text', value: 'Bar' },
               ],
             },
           ],
@@ -89,7 +88,7 @@ export default {
           requestID: '3',
           requestedAt: new Date(),
           requestedBy: '123',
-          status: 'rejected',
+          status: 'pending',
           kind: 'export',
           data: {
             profile: true,

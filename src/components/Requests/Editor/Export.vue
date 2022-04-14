@@ -107,7 +107,7 @@ export default {
 
   methods: {
     requestExport () {
-      this.$router.push({ name: 'request.view', params: { requestID: '1', kind: 'export' } })
+      this.$router.push({ name: 'request.view', params: { requestID: '3', kind: 'export' } })
     },
   },
 }

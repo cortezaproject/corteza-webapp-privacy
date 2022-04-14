@@ -17,26 +17,14 @@
       class="flex-grow-1"
       @search="filterList"
     >
-      <template #header="{ selected = [] }">
+      <template #header>
         <b-button
-          :disabled="processing || !selected.length"
-          variant="primary"
+          :disabled="processing"
+          variant="light"
           size="lg"
-          @click="handleSelectedRequests('enable')"
         >
-          {{ $t('module.enable') }}
+          Export
         </b-button>
-        <c-input-confirm
-          :disabled="processing || !selected.length"
-          :borderless="false"
-          variant="danger"
-          size="lg"
-          size-confirm="lg"
-          class="ml-1"
-          @confirmed="handleSelectedRequests('disable')"
-        >
-          {{ $t('module.disable') }}
-        </c-input-confirm>
       </template>
     </resource-list>
   </b-container>
@@ -74,7 +62,7 @@ export default {
           sortable: true,
         },
         {
-          key: 'dataSource',
+          key: 'datasource',
           sortable: true,
         },
         {
@@ -82,7 +70,7 @@ export default {
           sortable: true,
         },
         {
-          key: 'privateDataOwnership',
+          key: 'ownership',
           sortable: true,
         },
       ].map(c => ({
@@ -96,8 +84,7 @@ export default {
   methods: {
     items () {
       const set = [
-        { moduleID: '1', moduleName: 'Foo', datasource: '123', location: 'Spain', privateDataOwnership: 'Yes' },
-        { moduleID: '2', moduleName: 'Bar', datasource: '123', location: 'England', privateDataOwnership: 'No' },
+        { moduleID: '1', moduleName: 'Demo', moduleHandle: 'Demo', datasource: 'Primary Data Lake', location: 'Switzerland', ownership: 'ACME Ltd.' },
       ]
 
       const filter = {
