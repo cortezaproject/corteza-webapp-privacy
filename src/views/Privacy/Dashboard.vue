@@ -52,7 +52,8 @@
         {{ $t('data-source-location') }}
       </h6>
 
-      <datasource-map
+      <connection-map
+        :connections="connections"
         class="align-self-center justify-self-center flex-grow-1"
       />
     </div>
@@ -60,7 +61,7 @@
 </template>
 
 <script>
-import DatasourceMap from 'corteza-webapp-privacy/src/components/DatasourceMap'
+import ConnectionMap from 'corteza-webapp-privacy/src/components/ConnectionMap'
 
 export default {
   name: 'Dashboard',
@@ -70,11 +71,15 @@ export default {
   },
 
   components: {
-    DatasourceMap,
+    ConnectionMap,
   },
 
   data () {
     return {
+      processing: false,
+
+      connections: [],
+
       userOptions: [
         {
           title: this.$t('user-options.data-overview.title'),
@@ -93,9 +98,9 @@ export default {
         },
 
         {
-          title: this.$t('user-options.deletion.title'),
-          description: this.$t('user-options.deletion.description'),
-          button: { label: this.$t('user-options.deletion.button-label'), variant: 'danger', to: { name: 'request.create', params: { kind: 'deletion' } } },
+          title: this.$t('user-options.delete.title'),
+          description: this.$t('user-options.delete.description'),
+          button: { label: this.$t('user-options.delete.button-label'), variant: 'danger', to: { name: 'request.create', params: { kind: 'delete' } } },
         },
       ],
 
@@ -116,11 +121,30 @@ export default {
 
   computed: {
     isDC () {
-      return false
+      return true
     },
 
     options () {
       return this.isDC ? this.dcOptions : this.userOptions
+    },
+  },
+
+  created () {
+    this.fetchConnections()
+  },
+
+  methods: {
+    fetchConnections () {
+      this.processing = true
+
+      this.$SystemAPI.dalConnectionList()
+        .then(({ set = [] }) => {
+          this.connections = set
+        })
+        .catch(this.toastErrorHandler(this.$t('Failed to load connections')))
+        .finally(() => {
+          this.processing = false
+        })
     },
   },
 }

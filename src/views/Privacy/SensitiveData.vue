@@ -62,7 +62,7 @@ export default {
           sortable: true,
         },
         {
-          key: 'datasource',
+          key: 'connection',
           sortable: true,
         },
         {
@@ -84,7 +84,7 @@ export default {
   methods: {
     items () {
       const set = [
-        { moduleID: '1', moduleName: 'Demo', moduleHandle: 'Demo', datasource: 'Primary Data Lake', location: 'Switzerland', ownership: 'ACME Ltd.' },
+        { moduleID: '1', moduleName: 'Demo', moduleHandle: 'Demo', connection: 'Primary Data Lake', location: 'Switzerland', ownership: 'ACME Ltd.' },
       ]
 
       const filter = {

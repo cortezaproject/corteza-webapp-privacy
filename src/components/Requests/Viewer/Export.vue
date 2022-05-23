@@ -18,7 +18,7 @@
       <span
         class="ml-2"
       >
-        {{ $t(`date-range.${request.data.range}`) }}
+        {{ $t(`date-range.${mdata.range}`) }}
       </span>
     </b-form-group>
 
@@ -29,7 +29,7 @@
       <span
         class="ml-2"
       >
-        {{ $t(`file-format.${request.data.format}`) }}
+        {{ $t(`file-format.${mdata.format}`) }}
       </span>
     </b-form-group>
   </div>
@@ -46,9 +46,20 @@ export default {
     keyPrefix: 'view.export',
   },
 
+  data () {
+    return {
+      mdata: {
+        profile: true,
+        application: true,
+        range: 'all',
+        format: 'json',
+      },
+    }
+  },
+
   computed: {
     dataType () {
-      const { profile = false, application = false } = this.request.data
+      const { profile = false, application = false } = this.mdata
       return [
         { label: this.$t('data-type.profile-information'), include: profile },
         { label: this.$t('data-type.application-data'), include: application },

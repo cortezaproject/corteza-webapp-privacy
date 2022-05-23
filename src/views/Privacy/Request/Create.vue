@@ -5,6 +5,7 @@
     <request-editor
       v-if="kind"
       :kind="kind"
+      @submit="onSubmit"
     />
   </b-container>
 </template>
@@ -26,7 +27,7 @@ export default {
 
   props: {
     kind: {
-      type: Object,
+      type: String,
       required: true,
     },
   },
@@ -38,8 +39,17 @@ export default {
   },
 
   methods: {
-    onSubmit () {
-      // this.$router.push({ name: 'request.view', params: { requestID: '1', kind: 'foo' } })
+    onSubmit ({ kind }) {
+      this.processing = true
+
+      return this.$SystemAPI.dataPrivacyRequestCreate({ kind })
+        .then(({ requestID, kind } = {}) => {
+          this.$router.push({ name: 'request.view', params: { requestID, kind } })
+        })
+        .catch(this.toastErrorHandler(this.$t('notification:list.load.error')))
+        .finally(() => {
+          this.processing = false
+        })
     },
   },
 }

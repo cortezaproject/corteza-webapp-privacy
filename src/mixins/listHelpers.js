@@ -9,7 +9,7 @@ export default {
 
       pagination: {
         page: 1,
-        count: 0,
+        total: 0,
         limit: 10,
         pageCursor: undefined,
         prevPage: '',
@@ -27,7 +27,7 @@ export default {
      * @todo make this.filter reactive
      */
     '$route.fullPath': {
-      handler: function () {
+      handler () {
         this.handleQueryParams()
       },
     },
@@ -57,13 +57,15 @@ export default {
       this.pagination = { ...this.pagination, limit, pageCursor, prevPage, nextPage }
 
       // Sorting
-      const { sortBy = this.sorting.sortBy, sortDesc = this.sorting.sortDesc, ...r2 } = r1
+      let { sortBy = this.sorting.sortBy, sortDesc = this.sorting.sortDesc, ...r2 } = r1
+
+      sortDesc = sortDesc === true || sortDesc === 'true'
 
       // Reset pageCursor when sort changes, except on first fetch (so we use the pageCursor from url)
       if (!initial && (sortBy !== this.sorting.sortBy || sortDesc !== this.sorting.sortDesc)) {
         this.pagination.pageCursor = ''
       }
-      this.sorting = { sortBy, sortDesc: sortDesc === true || sortDesc === 'true' }
+      this.sorting = { sortBy, sortDesc }
 
       // Filtering
       // make sure filter fields are of the right type
@@ -112,13 +114,14 @@ export default {
     },
 
     encodeRouteParams () {
-      return {
-        query: {
-          ...this.pagination,
-          ...this.sorting,
-          ...this.filter,
-        },
+      const query = {
+        ...this.pagination,
+        ...this.sorting,
+        ...this.filter,
       }
+
+      delete query.total
+      return { query }
     },
 
     /**
@@ -141,14 +144,15 @@ export default {
         this.pagination.pageCursor = undefined
         this.pagination.nextPage = filter.nextPage
         this.pagination.prevPage = filter.prevPage
-        this.pagination.count = filter.count
+        this.pagination.total = filter.total
         this.pagination.page = filter.page
 
         return set
       }).catch(this.toastErrorHandler(this.$t('notification:list.load.error')))
-        .finally(async () => {
-          await new Promise(resolve => setTimeout(resolve, 300))
-          this.processing = false
+        .finally(() => {
+          setTimeout(() => {
+            this.processing = false
+          }, 300)
         })
     },
   },

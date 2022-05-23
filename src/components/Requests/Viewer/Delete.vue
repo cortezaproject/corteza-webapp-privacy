@@ -44,7 +44,7 @@ export default {
 
   i18nOptions: {
     namespaces: 'request',
-    keyPrefix: 'view.deletion',
+    keyPrefix: 'view.delete',
   },
 }
 </script>

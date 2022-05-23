@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-form-group
-      v-for="data in request.data"
+      v-for="data in mdata"
       :key="data.name"
       :label="data.name"
       label-class="text-primary"
@@ -43,7 +43,20 @@ export default {
 
   i18nOptions: {
     namespaces: 'request',
-    keyPrefix: 'view.correction',
+    keyPrefix: 'view.correct',
+  },
+
+  data () {
+    return {
+      mdata: [
+        {
+          name: 'Privacy',
+          items: [
+            { label: 'Text', value: 'Bar' },
+          ],
+        },
+      ],
+    }
   },
 }
 </script>

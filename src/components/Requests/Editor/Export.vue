@@ -8,13 +8,13 @@
         label-class="text-primary"
       >
         <b-form-checkbox
-          v-model="exportFilter.profile"
+          v-model="filter.profile"
           class="ml-2 mb-1"
         >
           {{ $t('data-type.profile-information') }}
         </b-form-checkbox>
         <b-form-checkbox
-          v-model="exportFilter.application"
+          v-model="filter.application"
           class="ml-2"
         >
           {{ $t('data-type.application-data') }}
@@ -31,7 +31,7 @@
             label-class="text-primary"
           >
             <b-form-select
-              v-model="exportFilter.range"
+              v-model="filter.range"
               :options="rangeOptions"
             />
           </b-form-group>
@@ -45,7 +45,7 @@
             label-class="text-primary"
           >
             <b-form-select
-              v-model="exportFilter.format"
+              v-model="filter.format"
               :options="formatOptions"
             />
           </b-form-group>
@@ -59,8 +59,8 @@
         :back-link="{ name: 'data-overview.application' }"
         submit-show
         :submit-label="$t('submit')"
-        :submit-disabled="!(exportFilter.profile || exportFilter.application)"
-        @submit="requestExport()"
+        :submit-disabled="!(filter.profile || filter.application)"
+        @submit="$emit('submit', { kind: 'export', filter })"
       >
         <template #right />
       </editor-toolbar>
@@ -72,7 +72,7 @@
 import EditorToolbar from 'corteza-webapp-privacy/src/components/Common/EditorToolbar'
 
 export default {
-  name: 'ApplicationDataDeletion',
+  name: 'ApplicationDataDelete',
 
   i18nOptions: {
     namespaces: 'request',
@@ -87,7 +87,7 @@ export default {
     return {
       processing: false,
 
-      exportFilter: {
+      filter: {
         profile: false,
         application: false,
         range: 'all',
@@ -103,12 +103,6 @@ export default {
         { text: this.$t('file-format.csv'), value: 'csv' },
       ],
     }
-  },
-
-  methods: {
-    requestExport () {
-      this.$router.push({ name: 'request.view', params: { requestID: '3', kind: 'export' } })
-    },
   },
 }
 </script>

@@ -20,39 +20,54 @@
       @row-clicked="rowClicked"
     >
       <template #header="{ selected = [] }">
-        <c-input-confirm
-          v-if="isDC"
-          :disabled="processing || !selected.length"
-          :borderless="false"
-          variant="primary"
-          size="lg"
-          size-confirm="lg"
-          @confirmed="handleSelectedRequests('approve')"
-        >
-          {{ $t('request.approve') }}
-        </c-input-confirm>
-        <c-input-confirm
-          v-if="isDC"
-          :disabled="processing || !selected.length"
-          :borderless="false"
-          variant="danger"
-          size="lg"
-          size-confirm="lg"
-          class="ml-1"
-          @confirmed="handleSelectedRequests('reject')"
-        >
-          {{ $t('request.reject') }}
-        </c-input-confirm>
+        <template v-if="isDC">
+          <c-input-confirm
+            v-if="isDC"
+            :disabled="processing || !selected.length"
+            :borderless="false"
+            variant="primary"
+            size="lg"
+            size-confirm="lg"
+            @confirmed="handleSelectedRequests(selected, 'approved')"
+          >
+            {{ $t('request.approve') }}
+          </c-input-confirm>
+          <c-input-confirm
+            v-if="isDC"
+            :disabled="processing || !selected.length"
+            :borderless="false"
+            variant="danger"
+            size="lg"
+            size-confirm="lg"
+            class="ml-1"
+            @confirmed="handleSelectedRequests(selected, 'rejected')"
+          >
+            {{ $t('request.reject') }}
+          </c-input-confirm>
+        </template>
 
-        <b-button
-          v-else
-          :disabled="processing"
-          variant="light"
-          size="lg"
-          @click="exportRequests()"
-        >
-          {{ $t('export') }}
-        </b-button>
+        <template v-else>
+          <c-input-confirm
+            :borderless="false"
+            :disabled="processing || !selected.length"
+            variant="light"
+            size="lg"
+            size-confirm="lg"
+            @confirmed="handleSelectedRequests(selected, 'canceled')"
+          >
+            Cancel Request
+          </c-input-confirm>
+
+          <b-button
+            :disabled="processing"
+            variant="light"
+            size="lg"
+            class="ml-1"
+            @click="exportRequests()"
+          >
+            {{ $t('export') }}
+          </b-button>
+        </template>
       </template>
 
       <template #status="{ item }">
@@ -64,7 +79,7 @@
             :class="`bg-${statusVariants[item.status]}`"
             style="width: 0.6rem; height: 0.6rem;"
           />
-          {{ $t(`status.${item.status}`) }}
+          {{ $t(`request:status.${item.status}`) }}
         </div>
       </template>
     </resource-list>
@@ -94,7 +109,15 @@ export default {
 
   data () {
     return {
+      users: {},
+
+      sorting: {
+        sortBy: 'requestedAt',
+        sortDesc: false,
+      },
+
       statusVariants: {
+        canceled: 'secondary',
         pending: 'warning',
         rejected: 'danger',
         approved: 'success',
@@ -107,19 +130,19 @@ export default {
       return [
         {
           key: 'kind',
-          tdClass: 'text-capitalize',
           sortable: true,
-          formatter: v => this.$t(`request-kind.${v}`),
+          formatter: kind => this.$t(`request:kind.${kind}`),
         },
         {
           key: 'requestedAt',
           sortable: true,
-          formatter: v => moment(v).fromNow(),
+          formatter: requestedAt => moment(requestedAt).fromNow(),
         },
         {
           hide: !this.isDC,
           key: 'requestedBy',
-          sortable: true,
+          sortable: false,
+          formatter: requestedBy => this.formatUser(requestedBy),
         },
         {
           key: 'status',
@@ -134,36 +157,52 @@ export default {
     },
 
     isDC () {
-      return false
+      return true
     },
   },
 
   methods: {
     items () {
-      const set = [
-        { requestID: '1', requestedAt: new Date(), requestedBy: 'John Doe', status: 'approved', kind: 'correction' },
-        { requestID: '2', requestedAt: new Date(), requestedBy: 'John Doe', status: 'rejected', kind: 'deletion' },
-        { requestID: '3', requestedAt: new Date(), requestedBy: 'John Doe', status: 'rejected', kind: 'export' },
-      ]
-
-      const filter = {
-        count: set.length,
-        limit: 10,
-      }
-      return this.procListResults(new Promise(resolve => setTimeout(resolve({ filter, set }), 200)))
+      return this.procListResults(this.$SystemAPI.dataPrivacyRequestList(this.encodeListParams())
+        .then(async ({ filter, set }) => {
+          if (this.isDC) {
+            await this.fetchUsers(set.map(({ requestedBy }) => requestedBy))
+          }
+          return { filter, set }
+        }))
     },
 
-    handleSelectedRequests (action) {
-      if (action === 'approve') {
+    handleSelectedRequests (selected, status) {
+      this.processing = true
 
-      } else if (action === 'reject') {
+      Promise.all(selected.map(requestID => {
+        return this.$SystemAPI.dataPrivacyRequestUpdateStatus({ requestID, status })
+      }))
+        .then(() => {
+          this.$root.$emit('bv::refresh::table', 'resource-list')
+        })
+        .finally(() => {
+          this.processing = true
+        })
+    },
 
-      }
-      this.$root.$emit('bv::refresh::table', 'resource-list')
+    fetchUsers (userID = []) {
+      userID = [...new Set(userID)]
+      return this.$SystemAPI.userList({ userID })
+        .then(({ set }) => {
+          set.forEach(user => {
+            this.users[user.userID] = user
+          })
+        })
+    },
+
+    formatUser (userID) {
+      const { name, username, email, handle } = this.users[userID]
+      return name || username || email || handle || userID || ''
     },
 
     rowClicked ({ requestID, kind }) {
-      this.$router.push({ name: 'request.view', params: { requestID, kind: 'deletion' } })
+      this.$router.push({ name: 'request.view', params: { requestID, kind } })
     },
   },
 }

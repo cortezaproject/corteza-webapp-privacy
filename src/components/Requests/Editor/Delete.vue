@@ -9,11 +9,10 @@
         class="mb-0"
       >
         <vue-select
-          v-model="datasource"
-          :options="datasources"
+          v-model="connection"
+          :options="connections"
           :clearable="false"
-          option-text="label"
-          option-value="datasourceID"
+          label="name"
           :placeholder="$t('data-source.placeholder')"
           class="h-100 bg-white"
         />
@@ -21,11 +20,11 @@
     </b-card>
 
     <div
-      v-if="datasource"
+      v-if="connection"
     >
       <b-card
-        v-for="module in datasource.modules"
-        :key="module.name"
+        v-for="m in connection.modules"
+        :key="m.name"
         header-class="bg-white border-bottom"
         class="shadow-sm"
       >
@@ -33,7 +32,7 @@
           <h5
             class="mb-0"
           >
-            {{ module.name }}
+            {{ m.name }}
           </h5>
         </template>
 
@@ -83,8 +82,8 @@
         :back-link="{ name: 'data-overview.application' }"
         submit-show
         :submit-label="$t('submit')"
-        :submit-disabled="!datasource"
-        @submit="requestDeletion()"
+        :submit-disabled="!connection"
+        @submit="$emit('submit', { kind: 'delete' })"
       >
         <template #right />
       </editor-toolbar>
@@ -99,7 +98,7 @@ import VueSelect from 'vue-select'
 export default {
   i18nOptions: {
     namespaces: 'request',
-    keyPrefix: 'edit.deletion',
+    keyPrefix: 'edit.delete',
   },
 
   components: {
@@ -111,41 +110,29 @@ export default {
     return {
       processing: false,
 
-      datasource: undefined,
+      connection: undefined,
 
-      datasources: [
-        {
-          datasourceID: '1',
-          label: 'Primary Data Source',
-          location: 'Ireland',
-          ownership: 'ACME Ltd.',
-          modules: [],
-        },
-        {
-          datasourceID: '2',
-          label: 'Primary Data Lake',
-          location: 'Switzerland',
-          ownership: 'ACME Ltd.',
-          modules: [
-            {
-              name: 'Demo',
-              items: [
-                { label: 'Text', value: 'Bar' },
-              ],
-            },
-          ],
-        },
-      ],
+      connections: [],
     }
   },
 
   created () {
-    this.datasource = this.datasources[0]
+    this.fetchConnections()
   },
 
   methods: {
-    requestDeletion () {
-      this.$router.push({ name: 'request.view', params: { requestID: '2', kind: 'deletion' } })
+    fetchConnections () {
+      this.processing = true
+
+      this.$SystemAPI.dalConnectionList()
+        .then(({ set = [] }) => {
+          this.connections = set
+          this.connection = set[0]
+        })
+        .catch(this.toastErrorHandler(this.$t('Failed to load connections')))
+        .finally(() => {
+          this.processing = false
+        })
     },
   },
 }

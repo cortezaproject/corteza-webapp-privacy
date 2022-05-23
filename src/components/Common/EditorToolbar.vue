@@ -34,8 +34,6 @@
       <b-col
         class="d-flex justify-content-end"
       >
-        <slot name="right" />
-
         <c-input-confirm
           v-if="deleteShow"
           :disabled="deleteDisabled || processing"
@@ -48,6 +46,7 @@
         >
           {{ deleteLabel }}
         </c-input-confirm>
+
         <b-button
           v-if="submitShow"
           :disabled="submitDisabled || processing"
@@ -58,6 +57,8 @@
         >
           {{ submitLabel }}
         </b-button>
+
+        <slot name="right" />
       </b-col>
     </b-row>
   </b-container>

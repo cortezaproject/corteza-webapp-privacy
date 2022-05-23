@@ -11,13 +11,38 @@
       <editor-toolbar
         :processing="processing"
         :back-link="{ name: 'request.list' }"
-        :submit-show="isDC"
-        :submit-label="$t('approve')"
         :delete-show="isDC"
+        :delete-disabled="!request || !isPending"
         :delete-label="$t('reject')"
-        @submit="$router.push({ name: 'request.list' })"
-        @delete="$router.push({ name: 'request.list' })"
-      />
+        @delete="handleRequest('rejected')"
+      >
+        <template #right>
+          <c-input-confirm
+            v-if="!isDC"
+            :borderless="false"
+            :disabled="!request || !isPending"
+            variant="light"
+            size="lg"
+            size-confirm="lg"
+            @confirmed="handleRequest('canceled')"
+          >
+            Cancel Request
+          </c-input-confirm>
+
+          <c-input-confirm
+            v-else
+            :borderless="false"
+            :disabled="!request || !isPending"
+            variant="primary"
+            size="lg"
+            size-confirm="lg"
+            class="ml-2"
+            @confirmed="handleRequest('approved')"
+          >
+            {{ $t('approve') }}
+          </c-input-confirm>
+        </template>
+      </editor-toolbar>
     </portal>
   </b-container>
 </template>
@@ -52,58 +77,16 @@ export default {
       processing: false,
 
       request: undefined,
-
-      requests: [
-        {
-          requestID: '1',
-          requestedAt: new Date(),
-          requestedBy: '123',
-          status: 'pending',
-          kind: 'correction',
-          data: [
-            {
-              name: 'Demo',
-              items: [
-                { label: 'Text', value: 'Bar' },
-              ],
-            },
-          ],
-        },
-        {
-          requestID: '2',
-          requestedAt: new Date(),
-          requestedBy: '123',
-          status: 'pending',
-          kind: 'deletion',
-          data: [
-            {
-              name: 'Demo',
-              items: [
-                { label: 'Text', value: 'Bar' },
-              ],
-            },
-          ],
-        },
-        {
-          requestID: '3',
-          requestedAt: new Date(),
-          requestedBy: '123',
-          status: 'pending',
-          kind: 'export',
-          data: {
-            profile: true,
-            application: true,
-            range: 'all',
-            format: 'json',
-          },
-        },
-      ],
     }
   },
 
   computed: {
     isDC () {
-      return false
+      return true
+    },
+
+    isPending () {
+      return this.request.status === 'pending'
     },
   },
 
@@ -111,8 +94,35 @@ export default {
     requestID: {
       immediate: true,
       handler (requestID) {
-        this.request = this.requests.find(r => r.requestID === requestID)
+        this.fetchRequest(requestID)
       },
+    },
+  },
+
+  methods: {
+    fetchRequest (requestID) {
+      this.processing = true
+
+      return this.$SystemAPI.dataPrivacyRequestRead({ requestID })
+        .then(request => {
+          this.request = request
+        })
+        .catch(this.toastErrorHandler(this.$t('notification:list.load.error')))
+        .finally(() => {
+          this.processing = false
+        })
+    },
+
+    handleRequest (status) {
+      this.processing = true
+
+      this.$SystemAPI.dataPrivacyRequestUpdateStatus({ requestID: this.request.requestID, status })
+        .then(() => {
+          this.$router.push({ name: 'request.list' })
+        })
+        .finally(() => {
+          this.processing = true
+        })
     },
   },
 }

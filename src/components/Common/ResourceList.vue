@@ -101,6 +101,7 @@
 
         <template #cell(select)="{ item }">
           <b-form-checkbox
+            v-if="item.status === 'pending'"
             class="ml-1"
             :checked="selected.includes(item[primaryKey])"
             @change="onSelectRow($event, item[primaryKey])"
@@ -128,7 +129,7 @@
           <div
             class="text-nowrap font-weight-bold"
           >
-            <span v-if="pagination.count > pagination.limit">
+            <span v-if="pagination.total > pagination.limit">
               {{ $t('pagination.showing', getPagination) }}
             </span>
             <span
@@ -253,20 +254,20 @@ export default {
     },
 
     disableSelectAll () {
-      return !this.pagination.count
+      return !this.pagination.total
     },
 
     allRowsSelected () {
-      return this.selected.length === this.pagination.count
+      return this.selected.length === this.pagination.total
     },
 
     getPagination () {
-      const { page = 1, count = 0, limit = 10 } = this.pagination
+      const { page = 1, total = 0, limit = 10 } = this.pagination
 
       return {
         from: ((page - 1) * limit) + 1,
-        to: Math.min((page * limit), count),
-        count,
+        to: Math.min((page * limit), total),
+        total,
       }
     },
 

@@ -1,22 +1,19 @@
 <template>
   <div>
     <portal to="topbar-title">
-      <span
-        class="text-capitalize"
-      >
-        {{ $t(`request-kind.${kind}`) }}
-      </span>
+      {{ $t(`request:kind.${kind}`) }}
     </portal>
 
     <component
       :is="kind"
+      v-on="$listeners"
     />
   </div>
 </template>
 
 <script>
-import Correction from './Correction'
-import Deletion from './Deletion'
+import Correct from './Correct'
+import Delete from './Delete'
 import Export from './Export'
 
 export default {
@@ -26,8 +23,8 @@ export default {
   },
 
   components: {
-    Correction,
-    Deletion,
+    Correct,
+    Delete,
     Export,
   },
 

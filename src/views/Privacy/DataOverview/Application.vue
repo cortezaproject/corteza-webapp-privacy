@@ -15,11 +15,10 @@
         class="mb-0"
       >
         <vue-select
-          v-model="datasource"
-          :options="datasources"
+          v-model="connection"
+          :options="connections"
           :clearable="false"
-          option-text="label"
-          option-value="datasourceID"
+          label="name"
           :placeholder="$t('select-data-source')"
           class="h-100 bg-white"
         />
@@ -27,11 +26,11 @@
     </b-card>
 
     <div
-      v-if="datasource"
+      v-if="connection && modules[connection.connectionID]"
     >
       <b-card
-        v-for="module in datasource.modules"
-        :key="module.name"
+        v-for="m in modules[connection.connectionID]"
+        :key="m.name"
         header-class="bg-white border-bottom"
         class="shadow-sm"
       >
@@ -39,7 +38,7 @@
           <h5
             class="mb-0"
           >
-            {{ module.name }}
+            {{ m.name }}
           </h5>
         </template>
 
@@ -49,7 +48,7 @@
           class="mb-0"
         >
           <b-form-group
-            v-for="item in module.items"
+            v-for="item in m.items"
             :key="item.label"
             :label="item.label"
             label-cols="12"
@@ -66,25 +65,24 @@
       </b-card>
     </div>
 
+    <h5
+      v-else
+      class="text-center mt-5"
+    >
+      No data available
+    </h5>
+
     <portal to="editor-toolbar">
       <editor-toolbar
         :processing="processing"
         :back-link="{ name: 'data-overview' }"
+        delete-show
+        :delete-label="$t('request-deletion')"
         submit-show
         :submit-label="$t('request-correction')"
-        @submit="$router.push({ name: 'request.create', params: { kind: 'correction'} })"
-      >
-        <template #right>
-          <b-button
-            :disabled="processing"
-            variant="danger"
-            size="lg"
-            :to="{ name: 'request.create', params: { kind: 'deletion'} }"
-          >
-            {{ $t('request-deletion') }}
-          </b-button>
-        </template>
-      </editor-toolbar>
+        @submit="$router.push({ name: 'request.create', params: { kind: 'correct'} })"
+        @delete="$router.push({ name: 'request.create', params: { kind: 'delete'} })"
+      />
     </portal>
   </b-container>
 </template>
@@ -110,36 +108,41 @@ export default {
     return {
       processing: false,
 
-      datasource: undefined,
+      connection: undefined,
 
-      datasources: [
-        {
-          datasourceID: '1',
-          label: 'Primary Data Source',
-          location: 'Ireland',
-          ownership: 'ACME Ltd.',
-          modules: [],
-        },
-        {
-          datasourceID: '2',
-          label: 'Primary Data Lake',
-          location: 'Switzerland',
-          ownership: 'ACME Ltd.',
-          modules: [
-            {
-              name: 'Demo',
-              items: [
-                { label: 'Text', value: 'Foo' },
-              ],
-            },
-          ],
-        },
-      ],
+      connections: [],
+
+      modules: {
+        '286516885879552040': [
+          {
+            name: 'Privacy',
+            items: [
+              { label: 'Text', value: 'Foo' },
+            ],
+          },
+        ],
+      },
     }
   },
 
   created () {
-    this.datasource = this.datasources[0]
+    this.fetchConnections()
+  },
+
+  methods: {
+    fetchConnections () {
+      this.processing = true
+
+      this.$SystemAPI.dalConnectionList()
+        .then(({ set = [] }) => {
+          this.connections = set
+          this.connection = set[0]
+        })
+        .catch(this.toastErrorHandler(this.$t('Failed to load connections')))
+        .finally(() => {
+          this.processing = false
+        })
+    },
   },
 }
 </script>
