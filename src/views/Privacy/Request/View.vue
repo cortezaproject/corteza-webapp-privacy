@@ -5,6 +5,15 @@
     <request-viewer
       v-if="request"
       :request="request"
+      class="mb-3"
+    />
+
+    <request-comments
+      v-if="request"
+      :comments="comments"
+      :sort="sort"
+      @sort="sort = $event"
+      @submit="submitComment"
     />
 
     <portal to="editor-toolbar">
@@ -50,6 +59,7 @@
 <script>
 import EditorToolbar from 'corteza-webapp-privacy/src/components/Common/EditorToolbar'
 import RequestViewer from 'corteza-webapp-privacy/src/components/Requests/Viewer'
+import RequestComments from 'corteza-webapp-privacy/src/components/Requests/Comments'
 
 export default {
   name: 'RequestView',
@@ -62,6 +72,7 @@ export default {
   components: {
     EditorToolbar,
     RequestViewer,
+    RequestComments,
   },
 
   props: {
@@ -76,7 +87,10 @@ export default {
     return {
       processing: false,
 
+      sort: 'createdAt DESC',
+
       request: undefined,
+      comments: [],
     }
   },
 
@@ -93,14 +107,25 @@ export default {
   watch: {
     requestID: {
       immediate: true,
-      handler (requestID) {
-        this.fetchRequest(requestID)
+      handler () {
+        if (this.requestID) {
+          this.fetchRequest()
+          this.fetchComments()
+        }
+      },
+    },
+
+    sort: {
+      handler () {
+        if (this.requestID) {
+          this.fetchComments()
+        }
       },
     },
   },
 
   methods: {
-    fetchRequest (requestID) {
+    fetchRequest (requestID = this.requestID) {
       this.processing = true
 
       return this.$SystemAPI.dataPrivacyRequestRead({ requestID })
@@ -113,12 +138,37 @@ export default {
         })
     },
 
+    fetchComments (requestID = this.requestID) {
+      this.processing = true
+
+      return this.$SystemAPI.dataPrivacyRequestCommentList({ requestID, sort: this.sort })
+        .then(({ set }) => {
+          this.comments = set
+        })
+        .catch(this.toastErrorHandler(this.$t('notification:list.load.error')))
+        .finally(() => {
+          this.processing = false
+        })
+    },
+
     handleRequest (status) {
       this.processing = true
 
-      this.$SystemAPI.dataPrivacyRequestUpdateStatus({ requestID: this.request.requestID, status })
+      this.$SystemAPI.dataPrivacyRequestUpdateStatus({ requestID: this.requestID, status })
         .then(() => {
           this.$router.push({ name: 'request.list' })
+        })
+        .finally(() => {
+          this.processing = true
+        })
+    },
+
+    submitComment (comment) {
+      this.processing = true
+
+      this.$SystemAPI.dataPrivacyRequestCommentCreate({ requestID: this.requestID, comment })
+        .then(() => {
+          this.fetchComments()
         })
         .finally(() => {
           this.processing = true

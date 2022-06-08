@@ -23,9 +23,9 @@
         </b-badge>
       </h5>
 
-      <card-text>
-        {{ formattedUser }}
-      </card-text>
+      <b-card-text class="text-primary">
+        {{ formattedUsers[request.requestedBy] || 'Unknown user' }}
+      </b-card-text>
     </template>
 
     <component
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { fmt } from '@cortezaproject/corteza-js'
+import { fmt, NoID } from '@cortezaproject/corteza-js'
 import base from './base'
 import Correct from './Correct'
 import Delete from './Delete'
@@ -58,7 +58,9 @@ export default {
 
   data () {
     return {
-      formattedUser: '',
+      processing: false,
+
+      formattedUsers: {},
 
       statusVariants: {
         canceled: 'secondary',
@@ -79,10 +81,17 @@ export default {
     'request.requestedBy': {
       immediate: true,
       handler (userID) {
-        this.$SystemAPI.userRead({ userID })
-          .then(({ name, username, email, handle }) => {
-            this.formattedUser = name || username || email || handle || userID || ''
-          })
+        if (userID !== NoID && !this.formattedUsers[userID]) {
+          this.processing = true
+
+          this.$SystemAPI.userRead({ userID })
+            .then(({ name, username, email, handle }) => {
+              this.formattedUsers[userID] = name || username || email || handle || userID || ''
+            })
+            .finally(() => {
+              this.processing = false
+            })
+        }
       },
     },
   },
