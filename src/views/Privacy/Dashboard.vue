@@ -1,5 +1,6 @@
 <template>
   <b-container
+    v-if="isDC !== null"
     fluid
     class="d-flex flex-column p-3"
   >
@@ -78,6 +79,8 @@ export default {
     return {
       processing: false,
 
+      isDC: null,
+
       connections: [],
 
       userOptions: [
@@ -120,10 +123,6 @@ export default {
   },
 
   computed: {
-    isDC () {
-      return true
-    },
-
     options () {
       return this.isDC ? this.dcOptions : this.userOptions
     },
@@ -131,6 +130,7 @@ export default {
 
   created () {
     this.fetchConnections()
+    this.checkIsDC()
   },
 
   methods: {
@@ -144,6 +144,13 @@ export default {
         .catch(this.toastErrorHandler(this.$t('Failed to load connections')))
         .finally(() => {
           this.processing = false
+        })
+    },
+
+    checkIsDC () {
+      this.$SystemAPI.roleList({ query: 'data-privacy-officer', memberID: this.$auth.user.userID })
+        .then(({ set = [] }) => {
+          this.isDC = !!set.length
         })
     },
   },

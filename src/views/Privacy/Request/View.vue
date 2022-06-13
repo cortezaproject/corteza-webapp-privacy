@@ -87,6 +87,8 @@ export default {
     return {
       processing: false,
 
+      isDC: null,
+
       sort: 'createdAt DESC',
 
       request: undefined,
@@ -95,10 +97,6 @@ export default {
   },
 
   computed: {
-    isDC () {
-      return true
-    },
-
     isPending () {
       return this.request.status === 'pending'
     },
@@ -124,7 +122,18 @@ export default {
     },
   },
 
+  created () {
+    this.checkIsDC()
+  },
+
   methods: {
+    checkIsDC () {
+      this.$SystemAPI.roleList({ query: 'data-privacy-officer', memberID: this.$auth.user.userID })
+        .then(({ set = [] }) => {
+          this.isDC = !!set.length
+        })
+    },
+
     fetchRequest (requestID = this.requestID) {
       this.processing = true
 

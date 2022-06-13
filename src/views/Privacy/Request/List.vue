@@ -1,5 +1,6 @@
 <template>
   <b-container
+    v-if="isDC !== null"
     fluid
     class="d-flex flex-column p-3"
   >
@@ -109,6 +110,8 @@ export default {
 
   data () {
     return {
+      isDC: null,
+
       users: {},
 
       sorting: {
@@ -155,13 +158,20 @@ export default {
           label: c.label || this.$t(`columns.${c.key}`),
         }))
     },
+  },
 
-    isDC () {
-      return true
-    },
+  created () {
+    this.checkIsDC()
   },
 
   methods: {
+    checkIsDC () {
+      this.$SystemAPI.roleList({ query: 'data-privacy-officer', memberID: this.$auth.user.userID })
+        .then(({ set = [] }) => {
+          this.isDC = !!set.length
+        })
+    },
+
     items () {
       return this.procListResults(this.$SystemAPI.dataPrivacyRequestList(this.encodeListParams())
         .then(async ({ filter, set }) => {
