@@ -129,7 +129,7 @@
           <div
             class="text-nowrap font-weight-bold"
           >
-            <span v-if="pagination.total > 1">
+            <span v-if="pagination.count > 1">
               {{ $t('pagination.showing', getPagination) }}
             </span>
             <span
@@ -254,11 +254,11 @@ export default {
     },
 
     disableSelectAll () {
-      return !this.pagination.total
+      return !this.availableItemIDs.length
     },
 
     allRowsSelected () {
-      return this.selected.length === this.pagination.total
+      return this.selected.length === this.availableItemIDs.length
     },
 
     getPagination () {
@@ -286,7 +286,7 @@ export default {
       this.availableItemIDs = []
 
       return this.items().then((items = []) => {
-        this.availableItemIDs = items.map(i => i[this.primaryKey])
+        this.availableItemIDs = items.filter(({ status }) => status === 'pending').map(i => i[this.primaryKey])
         return items
       })
     },

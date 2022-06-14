@@ -39,10 +39,12 @@ export default {
   },
 
   methods: {
-    onSubmit ({ kind }) {
+    onSubmit ({ kind, payload }) {
       this.processing = true
 
-      return this.$SystemAPI.dataPrivacyRequestCreate({ kind })
+      payload = [payload]
+
+      return this.$SystemAPI.dataPrivacyRequestCreate({ kind, payload })
         .then(({ requestID, kind } = {}) => {
           this.$router.push({ name: 'request.view', params: { requestID, kind } })
         })

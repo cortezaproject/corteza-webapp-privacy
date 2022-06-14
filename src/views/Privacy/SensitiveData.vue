@@ -83,9 +83,7 @@ export default {
 
   methods: {
     items () {
-      const set = [
-        { moduleID: '1', moduleName: 'Demo', moduleHandle: 'Demo', connection: 'Primary Data Lake', location: 'Switzerland', ownership: 'ACME Ltd.' },
-      ]
+      const set = []
 
       const filter = {
         count: set.length,

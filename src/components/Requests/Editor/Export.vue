@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="d-flex flex-column h-100"
+  >
     <b-card
       class="shadow-sm mb-3"
     >
@@ -8,13 +10,13 @@
         label-class="text-primary"
       >
         <b-form-checkbox
-          v-model="filter.profile"
+          v-model="payload.profile"
           class="ml-2 mb-1"
         >
           {{ $t('data-type.profile-information') }}
         </b-form-checkbox>
         <b-form-checkbox
-          v-model="filter.application"
+          v-model="payload.application"
           class="ml-2"
         >
           {{ $t('data-type.application-data') }}
@@ -31,7 +33,7 @@
             label-class="text-primary"
           >
             <b-form-select
-              v-model="filter.range"
+              v-model="payload.range"
               :options="rangeOptions"
             />
           </b-form-group>
@@ -45,7 +47,7 @@
             label-class="text-primary"
           >
             <b-form-select
-              v-model="filter.format"
+              v-model="payload.format"
               :options="formatOptions"
             />
           </b-form-group>
@@ -59,8 +61,8 @@
         :back-link="{ name: 'data-overview.application' }"
         submit-show
         :submit-label="$t('submit')"
-        :submit-disabled="!(filter.profile || filter.application)"
-        @submit="$emit('submit', { kind: 'export', filter })"
+        :submit-disabled="!(payload.profile || payload.application)"
+        @submit="$emit('submit', { kind: 'export', payload })"
       >
         <template #right />
       </editor-toolbar>
@@ -87,7 +89,7 @@ export default {
     return {
       processing: false,
 
-      filter: {
+      payload: {
         profile: false,
         application: false,
         range: 'all',

@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="d-flex flex-column h-100"
+  >
     <portal to="topbar-title">
       {{ $t(`request:kind.${kind}`) }}
     </portal>

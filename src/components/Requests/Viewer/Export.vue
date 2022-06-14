@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div
+    class="p-3"
+  >
     <b-form-group
       :label="$t('data-type.label')"
       label-class="text-primary"
@@ -18,7 +20,7 @@
       <span
         class="ml-2"
       >
-        {{ $t(`date-range.${mdata.range}`) }}
+        {{ $t(`date-range.${payload.range}`) }}
       </span>
     </b-form-group>
 
@@ -29,7 +31,7 @@
       <span
         class="ml-2"
       >
-        {{ $t(`file-format.${mdata.format}`) }}
+        {{ $t(`file-format.${payload.format}`) }}
       </span>
     </b-form-group>
   </div>
@@ -46,20 +48,9 @@ export default {
     keyPrefix: 'view.export',
   },
 
-  data () {
-    return {
-      mdata: {
-        profile: true,
-        application: true,
-        range: 'all',
-        format: 'json',
-      },
-    }
-  },
-
   computed: {
     dataType () {
-      const { profile = false, application = false } = this.mdata
+      const { profile = false, application = false } = this.payload
       return [
         { label: this.$t('data-type.profile-information'), include: profile },
         { label: this.$t('data-type.application-data'), include: application },

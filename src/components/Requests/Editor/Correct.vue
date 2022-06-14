@@ -1,7 +1,9 @@
 <template>
-  <div>
+  <div
+    class="d-flex flex-column h-100"
+  >
     <b-card
-      class="shadow-sm mb-3"
+      class="shadow-sm mb-4"
     >
       <b-form-group
         :label="$t('data-source.label')"
@@ -10,6 +12,7 @@
       >
         <vue-select
           v-model="connection"
+          :disabled="processing.connections"
           :options="connections"
           :clearable="false"
           label="name"
@@ -20,58 +23,85 @@
     </b-card>
 
     <div
-      v-if="connection && modules[connection.connectionID]"
+      v-if="processing.sensitiveData"
+      class="d-flex align-items-center justify-content-center h-100"
+    >
+      <b-spinner />
+    </div>
+
+    <h5
+      v-else-if="!(connection && modules[connection.connectionID])"
+      class="text-center mt-5"
+    >
+      No data available
+    </h5>
+
+    <div
+      v-else
     >
       <b-card
-        v-for="m in modules[connection.connectionID]"
-        :key="m.name"
-        header-class="bg-white border-bottom"
+        v-for="(m, mi) in modules[connection.connectionID]"
+        :key="m.moduleID"
+        header-class="bg-white border-bottom text-primary"
         class="shadow-sm"
+        :class="{ 'mt-3': !!mi }"
       >
         <template #header>
           <h5
             class="mb-0"
           >
-            {{ m.name }}
+            {{ m.module }}
           </h5>
         </template>
 
         <b-form-group
-          :label="$t('private-fields')"
-          label-class="text-primary"
+          v-for="(r, ri) in m.records"
+          :key="r.recordID"
+          :label="`RecordID: ${r.recordID}`"
+          label-class="text-muted"
           class="mb-0"
         >
           <b-form-group
-            v-for="item in m.items"
-            :key="item.label"
-            :label="item.label"
+            v-for="value in r.values"
+            :key="value.name"
+            :label="value.name"
             label-cols="12"
             label-cols-lg="4"
-            class="ml-2 mb-1"
+            class="mb-1"
           >
+            <template v-if="value.value.length">
+              <b-form-input
+                v-for="(v, vi) in value.value"
+                :key="vi"
+                :value="v"
+                class="mb-1"
+                @update="updateValue({ moduleID: m.module, recordID: r.recordID, field: value.name, value: $event, orgValue: v })"
+              />
+            </template>
+
             <b-form-input
-              v-model="item.value"
+              v-else
+              :value="value.value[0]"
+              class="mb-1"
+              @update="updateValue({ moduleID: m.module, recordID: r.recordID, field: value.name, value: $event, orgValue: null })"
             />
           </b-form-group>
+
+          <hr
+            v-if="ri < m.records.length - 1"
+          >
         </b-form-group>
       </b-card>
     </div>
 
-    <h5
-      v-else
-      class="text-center mt-5 pt-3"
-    >
-      No data available
-    </h5>
-
     <portal to="editor-toolbar">
       <editor-toolbar
-        :processing="processing"
+        :processing="processing.connections || processing.sensitiveData"
         :back-link="{ name: 'data-overview.application' }"
         submit-show
         :submit-label="$t('submit')"
         :submit-disabled="!connection"
-        @submit="$emit('submit', { kind: 'correct' })"
+        @submit="$emit('submit', { kind: 'correct', payload })"
       />
     </portal>
   </div>
@@ -94,14 +124,27 @@ export default {
 
   data () {
     return {
-      processing: false,
+      processing: {
+        connections: true,
+        sensitiveData: true,
+      },
 
       connection: undefined,
 
       connections: [],
 
       modules: {},
+
+      payload: {},
     }
+  },
+
+  watch: {
+    connection: {
+      handler ({ connectionID } = {}) {
+        this.fetchSensitiveData(connectionID)
+      },
+    },
   },
 
   created () {
@@ -110,7 +153,7 @@ export default {
 
   methods: {
     fetchConnections () {
-      this.processing = true
+      this.processing.connections = true
 
       this.$SystemAPI.dalConnectionList()
         .then(({ set = [] }) => {
@@ -119,8 +162,56 @@ export default {
         })
         .catch(this.toastErrorHandler(this.$t('Failed to load connections')))
         .finally(() => {
-          this.processing = false
+          this.processing.connections = false
         })
+    },
+
+    fetchSensitiveData (connectionID) {
+      if (connectionID) {
+        this.processing.sensitiveData = true
+
+        this.$ComposeAPI.dataPrivacySensitiveDataList({ connectionID: [connectionID] })
+          .then(({ set = [] }) => {
+            if (set.length) {
+              this.$set(this.modules, connectionID, set)
+            }
+
+            // Reset payload
+            this.payload = {
+              connectionID,
+              modules: {},
+            }
+          })
+          .catch(this.toastErrorHandler(this.$t('Failed to fetch sensitive data')))
+          .finally(() => {
+            this.processing.sensitiveData = false
+          })
+      }
+    },
+
+    updateValue ({ moduleID, recordID, field, value, orgValue }) {
+      const { connectionID } = this.connection
+
+      if (value === orgValue) {
+        delete this.payload.modules[moduleID].records[recordID].values[field]
+        return
+      }
+
+      if (connectionID) {
+        if (!this.payload.modules[moduleID]) {
+          this.payload.modules[moduleID] = {
+            records: {},
+          }
+        }
+
+        if (!this.payload.modules[moduleID].records[recordID]) {
+          this.payload.modules[moduleID].records[recordID] = {
+            values: {},
+          }
+        }
+
+        this.payload.modules[moduleID].records[recordID].values[field] = [value]
+      }
     },
   },
 }

@@ -120,7 +120,7 @@ export default {
         ...this.filter,
       }
 
-      delete query.total
+      delete query.count
       delete query.requestedBy
 
       return { query }
