@@ -105,6 +105,8 @@ export default {
 
       const sort = sortBy ? `${sortBy} ${sortDesc ? 'DESC' : 'ASC'}` : undefined
 
+      console.log(this.filter)
+
       return {
         ...this.filter,
         ...this.pagination,
@@ -121,6 +123,8 @@ export default {
       }
 
       delete query.total
+      delete query.requestedBy
+
       return { query }
     },
 

@@ -114,6 +114,10 @@ export default {
 
       users: {},
 
+      filter: {
+        requestedBy: [],
+      },
+
       sorting: {
         sortBy: 'requestedAt',
         sortDesc: false,
@@ -168,6 +172,10 @@ export default {
     checkIsDC () {
       this.$SystemAPI.roleList({ query: 'data-privacy-officer', memberID: this.$auth.user.userID })
         .then(({ set = [] }) => {
+          if (!set.length) {
+            this.filter.requestedBy = [this.$auth.user.userID]
+          }
+
           this.isDC = !!set.length
         })
     },
