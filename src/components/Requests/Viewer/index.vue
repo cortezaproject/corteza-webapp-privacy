@@ -1,5 +1,6 @@
 <template>
   <b-card
+    v-if="!processing"
     header-class="bg-white border-bottom"
     class="shadow-sm"
   >
@@ -81,6 +82,12 @@ export default {
     'request.requestedBy': {
       immediate: true,
       handler (userID) {
+        if (userID === this.$auth.user.userID) {
+          const { name, username, email, handle } = this.$auth.user
+          this.formattedUsers[userID] = name || username || email || handle || userID || ''
+          return
+        }
+
         if (userID !== NoID && !this.formattedUsers[userID]) {
           this.processing = true
 

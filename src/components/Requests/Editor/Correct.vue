@@ -100,16 +100,7 @@ export default {
 
       connections: [],
 
-      modules: {
-        '286516885879552040': [
-          {
-            name: 'Privacy',
-            items: [
-              { label: 'Text', value: 'Foo' },
-            ],
-          },
-        ],
-      },
+      modules: {},
     }
   },
 

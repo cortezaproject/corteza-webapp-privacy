@@ -1,5 +1,6 @@
 <template>
   <b-card
+    v-if="!processing"
     header-class="bg-white border-bottom"
     class="shadow-sm"
   >

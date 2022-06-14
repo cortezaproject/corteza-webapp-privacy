@@ -48,14 +48,7 @@ export default {
 
   data () {
     return {
-      mdata: [
-        {
-          name: 'Privacy',
-          items: [
-            { label: 'Text', value: 'Bar' },
-          ],
-        },
-      ],
+      mdata: [],
     }
   },
 }
