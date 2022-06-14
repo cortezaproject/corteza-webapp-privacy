@@ -129,7 +129,7 @@
           <div
             class="text-nowrap font-weight-bold"
           >
-            <span v-if="pagination.total > pagination.limit">
+            <span v-if="pagination.total > 1">
               {{ $t('pagination.showing', getPagination) }}
             </span>
             <span
@@ -262,12 +262,12 @@ export default {
     },
 
     getPagination () {
-      const { page = 1, total = 0, limit = 10 } = this.pagination
+      const { page = 1, count = 0, limit = 10 } = this.pagination
 
       return {
         from: ((page - 1) * limit) + 1,
-        to: Math.min((page * limit), total),
-        total,
+        to: Math.min((page * limit), count),
+        count,
       }
     },
 

@@ -9,7 +9,7 @@ export default {
 
       pagination: {
         page: 1,
-        total: 0,
+        count: 0,
         limit: 10,
         pageCursor: undefined,
         prevPage: '',
@@ -105,8 +105,6 @@ export default {
 
       const sort = sortBy ? `${sortBy} ${sortDesc ? 'DESC' : 'ASC'}` : undefined
 
-      console.log(this.filter)
-
       return {
         ...this.filter,
         ...this.pagination,
@@ -144,12 +142,13 @@ export default {
         this.$router.push(this.encodeRouteParams())
       }
 
-      return p.then(({ set, filter } = {}) => {
+      return p.then(({ set = [], filter = {} } = {}) => {
         this.pagination.pageCursor = undefined
         this.pagination.nextPage = filter.nextPage
         this.pagination.prevPage = filter.prevPage
-        this.pagination.total = filter.total
-        this.pagination.page = filter.page
+        this.pagination.count = set.length
+        this.pagination.limit = set.length
+        this.pagination.page = 1
 
         return set
       }).catch(this.toastErrorHandler(this.$t('notification:list.load.error')))
