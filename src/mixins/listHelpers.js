@@ -10,7 +10,7 @@ export default {
       pagination: {
         page: 1,
         count: 0,
-        limit: 10,
+        limit: 15,
         pageCursor: undefined,
         prevPage: '',
         nextPage: '',
@@ -147,7 +147,7 @@ export default {
         this.pagination.nextPage = filter.nextPage
         this.pagination.prevPage = filter.prevPage
         this.pagination.count = set.length
-        this.pagination.limit = set.length
+        this.pagination.limit = filter.limit || this.pagination.limit
         this.pagination.page = 1
 
         return set
