@@ -954,10 +954,10 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@cortezaproject/corteza-js@^2022.3.0", "@cortezaproject/corteza-js@^2022.3.2":
-  version "2022.3.2"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2022.3.2.tgz#cb1a6b6cb2f3e391ad400e2bba55b2fe0f12809b"
-  integrity sha512-V3q4tYg3i28adgopumn7hg3aNdfu/ILduvS6Z3CtZHZPNdVaVDp4lLsMH3oF80p8NUrvLiuZZ3li/ARmb1AM1w==
+"@cortezaproject/corteza-js@^2022.9.0-dev.1":
+  version "2022.9.0-dev.1"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-js/-/corteza-js-2022.9.0-dev.1.tgz#2ec9005f42c1e55756dcb10775ac0ec352997f6c"
+  integrity sha512-mr1kEvoFnFQWL2PJvJnpYIwM8dH7EWusJzZ020Eah84JqOXMNgFTIV0lqtUMMz8scb9x/wV4QebUhj/qsF2Bsg==
   dependencies:
     axios "^0.21.1"
     chart.js "2.9.3"
@@ -965,16 +965,16 @@
     lodash "^4.17.15"
     minimalist "^1.0.0"
     minimatch "^3.0.4"
-    moment "2.25.3"
+    moment "2.29.2"
     numeral "^2.0.6"
     pino "^5.16.0"
 
-"@cortezaproject/corteza-vue@^2022.3.0":
-  version "2022.3.2"
-  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-vue/-/corteza-vue-2022.3.2.tgz#b0cdeb221c8be9661abf9c815baceb34109fc04e"
-  integrity sha512-lMlsHzY/autFHdUlxGCPkPMzb48Kg3Slz84dZSmodDWnHIPq02p/T9+cFM5BmkUjTl3KtGDWF/q33+JY6Kkr1Q==
+"@cortezaproject/corteza-vue@^2022.9.0-dev.1":
+  version "2022.9.0-dev.1"
+  resolved "https://registry.yarnpkg.com/@cortezaproject/corteza-vue/-/corteza-vue-2022.9.0-dev.1.tgz#5bed65e65210458124a0fc8d06e712066f2a9bb7"
+  integrity sha512-QnwDqXu7lZC8H99Rt+vcr/2JltgFkPT+Wjfhj1pL2n9PV/gg5dRTxH0j4tUDRLYNd1yvyrGgUKJsu7O2sF37QQ==
   dependencies:
-    "@cortezaproject/corteza-js" "^2022.3.2"
+    "@cortezaproject/corteza-js" "^2022.9.0-dev.1"
     "@fortawesome/fontawesome-svg-core" "^1.2.26"
     "@fortawesome/free-solid-svg-icons" "^5.12.0"
     "@fortawesome/vue-fontawesome" "^0.1.9"
@@ -993,7 +993,7 @@
     i18next-multiload-backend-adapter "^1.0.0"
     kind-of "^6.0.3"
     lodash "^4.17.21"
-    moment "2.25.3"
+    moment "2.29.2"
     pdfjs-dist "2.2.228"
     pino "^5.16.0"
     portal-vue "^2.1.7"
@@ -7618,10 +7618,10 @@ mochapack@^1.1.15:
     toposort "^2.0.2"
     yargs "14.0.0"
 
-moment@2.25.3:
-  version "2.25.3"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.25.3.tgz#252ff41319cf41e47761a1a88cab30edfe9808c0"
-  integrity sha512-PuYv0PHxZvzc15Sp8ybUCoQ+xpyPWvjOuK72a5ovzp2LI32rJXOiIfyoFoYvG3s6EwwrdkMyWuRiEHSZRLJNdg==
+moment@2.29.2:
+  version "2.29.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.2.tgz#00910c60b20843bcba52d37d58c628b47b1f20e4"
+  integrity sha512-UgzG4rvxYpN15jgCmVJwac49h9ly9NurikMWGPdVxm8GZD6XjkKPxDTjQQ43gtGgnV3X0cAyWDdP2Wexoquifg==
 
 moment@^2.10.2:
   version "2.29.3"
