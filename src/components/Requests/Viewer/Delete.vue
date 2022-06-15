@@ -1,38 +1,49 @@
 <template>
   <div>
-    <b-form-group
-      v-for="data in request.data"
-      :key="data.name"
-      :label="data.name"
-      label-class="text-primary"
+    <b-card
+      v-for="(m, mi) in payloadValues"
+      :key="m.moduleID"
+      header-class="bg-white border-bottom text-primary"
+      class="border"
+      :class="{ 'mt-3': !!mi }"
     >
-      <b-row
-        v-for="item in data.items"
-        :key="item.label"
-        class="ml-1 mb-2"
-      >
-        <b-col
-          cols="12"
-          lg="4"
+      <template #header>
+        <h5
+          class="mb-0"
         >
-          {{ item.label }}
-        </b-col>
-        <b-col>
-          {{ item.value }}
-        </b-col>
-      </b-row>
-    </b-form-group>
+          {{ m.moduleID }}
+        </h5>
+      </template>
 
-    <!-- <b-form-group
-      :label="$t('request-comment')"
-      label-class="text-primary"
-    >
-      <div
-        class="ml-3"
+      <b-form-group
+        v-for="(r, ri) in m.records"
+        :key="r.recordID"
+        :label="`RecordID: ${r.recordID}`"
+        label-class="text-muted"
+        class="mb-0"
       >
-        This data is irrelevant for the employment status, please delete it.
-      </div>
-    </b-form-group> -->
+        <b-form-group
+          v-for="value in r.values"
+          :key="value.field"
+          :label="value.field"
+          label-cols="12"
+          label-cols-lg="4"
+          class="mb-1"
+        >
+          <p
+            v-for="(v, vi) in value.value"
+            :key="vi"
+            class="py-2 mb-0"
+          >
+            {{ v }}
+          </p>
+        </b-form-group>
+
+        <hr
+          v-if="ri < m.records.length - 1"
+        >
+      </b-form-group>
+    </b-card>
   </div>
 </template>
 
@@ -45,6 +56,22 @@ export default {
   i18nOptions: {
     namespaces: 'request',
     keyPrefix: 'view.delete',
+  },
+
+  computed: {
+    payloadValues () {
+      const { modules = {} } = this.payload || {}
+
+      return Object.entries(modules).map(([moduleID, { records = {} }]) => {
+        records = Object.entries(records).map(([recordID, { values = {} }]) => {
+          values = Object.entries(values).map(([field, value = []]) => {
+            return { field, value }
+          })
+          return { recordID, values }
+        })
+        return { moduleID, records }
+      })
+    },
   },
 }
 </script>
