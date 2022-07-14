@@ -55,7 +55,6 @@
         hover
         responsive
         head-variant="light"
-        class="mb-0"
         :primary-key="primaryKey"
         :sort-by.sync="sorting.sortBy"
         :sort-desc.sync="sorting.sortDesc"
@@ -65,6 +64,7 @@
         no-sort-reset
         :tbody-tr-class="{ 'pointer': clickable }"
         no-local-sorting
+        class="mb-0 h-100"
         @row-clicked="$emit('row-clicked', $event)"
       >
         <template #empty>
@@ -90,7 +90,10 @@
           </div>
         </template>
 
-        <template #head(select)>
+        <template
+          v-if="selectable"
+          #head(select)
+        >
           <b-checkbox
             :disabled="disableSelectAll"
             :checked="allRowsSelected && !disableSelectAll"
@@ -220,6 +223,11 @@ export default {
     },
 
     clickable: {
+      type: Boolean,
+      default: false,
+    },
+
+    selectable: {
       type: Boolean,
       default: false,
     },

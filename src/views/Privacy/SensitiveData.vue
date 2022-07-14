@@ -14,10 +14,13 @@
       :filter="filter"
       :sorting="sorting"
       :pagination="pagination"
+      :selectable="false"
+      clickable
       class="flex-grow-1"
       @search="filterList"
+      @row-clicked="rowClicked"
     >
-      <template #header>
+      <!-- <template #header>
         <b-button
           :disabled="processing"
           variant="light"
@@ -25,7 +28,7 @@
         >
           Export
         </b-button>
-      </template>
+      </template> -->
     </resource-list>
   </b-container>
 </template>
@@ -54,24 +57,40 @@ export default {
     return {
       fields: [
         {
-          key: 'moduleName',
-          sortable: true,
+          key: 'module',
+          formatter: module => {
+            return module ? module.name : ''
+          },
         },
         {
-          key: 'moduleHandle',
-          sortable: true,
+          key: 'namespace',
+          formatter: namespace => {
+            return namespace ? namespace.name : ''
+          },
         },
         {
           key: 'connection',
-          sortable: true,
+          formatter: connection => {
+            return connection ? connection.name : ''
+          },
         },
         {
           key: 'location',
-          sortable: true,
+          formatter: (value, key, item) => {
+            const { location = {} } = item.connection || {}
+            if (location.properties) {
+              return location.properties.name
+            }
+
+            return ''
+          },
         },
         {
           key: 'ownership',
-          sortable: true,
+          formatter: (value, key, item) => {
+            const { ownership } = item.connection || {}
+            return ownership
+          },
         },
       ].map(c => ({
         ...c,
@@ -83,22 +102,11 @@ export default {
 
   methods: {
     items () {
-      const set = []
-
-      const filter = {
-        count: set.length,
-        limit: 10,
-      }
-      return this.procListResults(new Promise(resolve => setTimeout(resolve({ filter, set }), 200)))
+      return this.procListResults(this.$ComposeAPI.dataPrivacyModuleList(this.encodeListParams()))
     },
 
-    handleSelectedRequests (action) {
-      if (action === 'enable') {
-
-      } else if (action === 'disable') {
-
-      }
-      this.$root.$emit('bv::refresh::table', 'resource-list')
+    rowClicked ({ namespace, module }) {
+      window.open(`${window.location.origin}/compose/ns/${namespace.slug}/admin/modules/${module.moduleID}/edit`, '_blank')
     },
   },
 }
