@@ -90,7 +90,10 @@
           </div>
         </template>
 
-        <template #head(select)>
+        <template
+          v-if="selectable"
+          #head(select)
+        >
           <b-checkbox
             :disabled="disableSelectAll"
             :checked="allRowsSelected && !disableSelectAll"
@@ -220,6 +223,11 @@ export default {
     },
 
     clickable: {
+      type: Boolean,
+      default: false,
+    },
+
+    selectable: {
       type: Boolean,
       default: false,
     },

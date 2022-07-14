@@ -14,6 +14,7 @@
       :filter="filter"
       :sorting="sorting"
       :pagination="pagination"
+      :selectable="false"
       class="flex-grow-1"
       @search="filterList"
     >
@@ -54,24 +55,31 @@ export default {
     return {
       fields: [
         {
-          key: 'moduleName',
-          sortable: true,
-        },
-        {
-          key: 'moduleHandle',
-          sortable: true,
+          key: 'name',
         },
         {
           key: 'connection',
-          sortable: true,
+          formatter: connection => {
+            return connection ? connection.name : ''
+          },
         },
         {
           key: 'location',
-          sortable: true,
+          formatter: (value, key, item) => {
+            const { location = {} } = item.connection || {}
+            if (location.properties) {
+              return location.properties.name
+            }
+
+            return ''
+          },
         },
         {
           key: 'ownership',
-          sortable: true,
+          formatter: (value, key, item) => {
+            const { ownership } = item.connection || {}
+            return ownership
+          },
         },
       ].map(c => ({
         ...c,
@@ -83,13 +91,7 @@ export default {
 
   methods: {
     items () {
-      const set = []
-
-      const filter = {
-        count: set.length,
-        limit: 10,
-      }
-      return this.procListResults(new Promise(resolve => setTimeout(resolve({ filter, set }), 200)))
+      return this.procListResults(this.$ComposeAPI.dataPrivacyModuleList(this.encodeListParams()))
     },
 
     handleSelectedRequests (action) {
@@ -98,6 +100,7 @@ export default {
       } else if (action === 'disable') {
 
       }
+
       this.$root.$emit('bv::refresh::table', 'resource-list')
     },
   },

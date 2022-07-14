@@ -15,6 +15,7 @@
       :filter="filter"
       :sorting="sorting"
       :pagination="pagination"
+      selectable
       clickable
       class="flex-grow-1"
       @search="filterList"
