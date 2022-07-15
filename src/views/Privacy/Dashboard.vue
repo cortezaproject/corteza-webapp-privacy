@@ -55,7 +55,7 @@
 
       <connection-map
         :connections="connections"
-        class="align-self-center justify-self-center flex-grow-1"
+        class="align-self-center justify-self-center flex-grow-1 rounded-lg shadow-lg"
       />
     </div>
   </b-container>

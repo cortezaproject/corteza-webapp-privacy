@@ -8,7 +8,7 @@
     />
 
     <l-marker
-      v-for="connection in connections"
+      v-for="connection in validMarkers"
       :key="connection.name"
       :lat-lng="getLocationCoordinates(connection)"
     >
@@ -69,9 +69,19 @@ export default {
     }
   },
 
+  computed: {
+    validMarkers () {
+      return this.connections.filter(({ location = {} }) => {
+        const { geometry = {} } = location
+        return !!geometry.coordinates
+      })
+    },
+  },
+
   methods: {
-    getLocationCoordinates (connection) {
-      return this.getLatLng(connection.location.geometry.coordinates || [])
+    getLocationCoordinates ({ location = {} }) {
+      const { geometry = {} } = location
+      return this.getLatLng(geometry.coordinates)
     },
 
     getLocationName (connection) {
