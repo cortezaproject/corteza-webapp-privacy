@@ -19,8 +19,8 @@
           :disabled="processing.connections"
           :options="connections"
           :clearable="false"
-          label="name"
           :placeholder="$t('select-data-source')"
+          :get-option-label="({ handle, meta }) => meta.name || handle"
           class="h-100 bg-white"
         />
       </b-form-group>
@@ -152,7 +152,7 @@ export default {
     fetchConnections () {
       this.processing.connections = true
 
-      this.$SystemAPI.dalConnectionList()
+      this.$SystemAPI.dataPrivacyConnectionList()
         .then(({ set = [] }) => {
           this.connections = set
           this.connection = set[0]
@@ -167,7 +167,7 @@ export default {
       if (connectionID) {
         this.processing.sensitiveData = true
 
-        this.$ComposeAPI.dataPrivacySensitiveDataList({ connectionID: [connectionID] })
+        this.$ComposeAPI.dataPrivacyRecordList({ connectionID: [connectionID] })
           .then(({ set = [] }) => {
             if (set.length) {
               this.$set(this.modules, connectionID, set)
