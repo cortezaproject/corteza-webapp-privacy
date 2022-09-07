@@ -8,13 +8,22 @@
       {{ $t('title') }}
     </portal>
 
-    <resource-list
+    <c-resource-list
       primary-key="requestID"
       :items="items"
       :fields="fields"
       :filter="filter"
       :sorting="sorting"
       :pagination="pagination"
+      :translations="{
+        noItems: $t('general:resourceList.noItems'),
+        loading: $t('general:resourceList.loading'),
+        searchPlaceholder: $t('general:resourceList.search.placeholder'),
+        showingPagination: 'general:resourceList.pagination.showing',
+        singlePluralPagination: 'general:resourceList.pagination.single_plural',
+        prevPagination: $t('general:resourceList.pagination.prev'),
+        nextPagination: $t('general:resourceList.pagination.next'),
+      }"
       selectable
       clickable
       class="flex-grow-1"
@@ -84,20 +93,21 @@
           {{ $t(`request:status.${item.status}`) }}
         </div>
       </template>
-    </resource-list>
+    </c-resource-list>
   </b-container>
 </template>
 
 <script>
 import moment from 'moment'
-import ResourceList from 'corteza-webapp-privacy/src/components/Common/ResourceList'
 import listHelpers from 'corteza-webapp-privacy/src/mixins/listHelpers'
+import { components } from '@cortezaproject/corteza-vue'
+const { CResourceList } = components
 
 export default {
   name: 'RequestList',
 
   components: {
-    ResourceList,
+    CResourceList,
   },
 
   mixins: [

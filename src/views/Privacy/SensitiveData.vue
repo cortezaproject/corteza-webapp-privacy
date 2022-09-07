@@ -7,7 +7,7 @@
       {{ $t('title') }}
     </portal>
 
-    <resource-list
+    <c-resource-list
       primary-key="moduleID"
       :items="items"
       :fields="fields"
@@ -15,6 +15,15 @@
       :sorting="sorting"
       :pagination="pagination"
       :selectable="false"
+      :translations="{
+        noItems: $t('general:resourceList.noItems'),
+        loading: $t('general:resourceList.loading'),
+        searchPlaceholder: $t('general:resourceList.search.placeholder'),
+        showingPagination: 'general:resourceList.pagination.showing',
+        singlePluralPagination: 'general:resourceList.pagination.single_plural',
+        prevPagination: $t('general:resourceList.pagination.prev'),
+        nextPagination: $t('general:resourceList.pagination.next'),
+      }"
       clickable
       class="flex-grow-1"
       @search="filterList"
@@ -29,19 +38,20 @@
           Export
         </b-button>
       </template> -->
-    </resource-list>
+    </c-resource-list>
   </b-container>
 </template>
 
 <script>
-import ResourceList from 'corteza-webapp-privacy/src/components/Common/ResourceList'
 import listHelpers from 'corteza-webapp-privacy/src/mixins/listHelpers'
+import { components } from '@cortezaproject/corteza-vue'
+const { CResourceList } = components
 
 export default {
   name: 'SensitiveData',
 
   components: {
-    ResourceList,
+    CResourceList,
   },
 
   mixins: [
