@@ -26,6 +26,7 @@
       }"
       selectable
       clickable
+      hide-total
       class="flex-grow-1"
       @search="filterList"
       @row-clicked="rowClicked"

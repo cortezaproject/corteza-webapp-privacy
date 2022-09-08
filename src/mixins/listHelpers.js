@@ -146,9 +146,6 @@ export default {
         this.pagination.pageCursor = undefined
         this.pagination.nextPage = filter.nextPage
         this.pagination.prevPage = filter.prevPage
-        this.pagination.count = set.length
-        this.pagination.limit = filter.limit || this.pagination.limit
-        this.pagination.page = 1
 
         return set
       }).catch(this.toastErrorHandler(this.$t('notification:list.load.error')))

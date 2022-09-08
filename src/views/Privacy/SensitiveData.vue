@@ -25,20 +25,11 @@
         nextPagination: $t('general:resourceList.pagination.next'),
       }"
       clickable
+      hide-total
       class="flex-grow-1"
       @search="filterList"
       @row-clicked="rowClicked"
-    >
-      <!-- <template #header>
-        <b-button
-          :disabled="processing"
-          variant="light"
-          size="lg"
-        >
-          Export
-        </b-button>
-      </template> -->
-    </c-resource-list>
+    />
   </b-container>
 </template>
 
@@ -81,24 +72,23 @@ export default {
         {
           key: 'connection',
           formatter: connection => {
-            return connection ? connection.name : ''
+            const { name } = connection.meta || {}
+            return name
           },
         },
         {
           key: 'location',
           formatter: (value, key, item) => {
-            const { location = {} } = item.connection || {}
-            if (location.properties) {
-              return location.properties.name
-            }
-
-            return ''
+            const { meta = {} } = item.connection || {}
+            const { properties = {} } = meta.location || {}
+            return properties.name
           },
         },
         {
           key: 'ownership',
           formatter: (value, key, item) => {
-            const { ownership } = item.connection || {}
+            const { meta = {} } = item.connection || {}
+            const { ownership } = meta || {}
             return ownership
           },
         },
