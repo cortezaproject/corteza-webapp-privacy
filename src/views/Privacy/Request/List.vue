@@ -70,7 +70,7 @@
             Cancel Request
           </c-input-confirm>
 
-          <b-button
+          <!-- <b-button
             :disabled="processing"
             variant="light"
             size="lg"
@@ -78,7 +78,7 @@
             @click="exportRequests()"
           >
             {{ $t('export') }}
-          </b-button>
+          </b-button> -->
         </template>
       </template>
 
