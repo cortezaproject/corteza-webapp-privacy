@@ -157,7 +157,7 @@ export default {
           this.connections = set
           this.connection = set[0]
         })
-        .catch(this.toastErrorHandler(this.$t('Failed to load connections')))
+        .catch(this.toastErrorHandler(this.$t('notification:connection-load-failed')))
         .finally(() => {
           this.processing.connections = false
         })
@@ -173,7 +173,7 @@ export default {
               this.$set(this.modules, connectionID, set)
             }
           })
-          .catch(this.toastErrorHandler(this.$t('Failed to fetch sensitive data')))
+          .catch(this.toastErrorHandler(this.$t('notification:sensitive-data-fetch-failed')))
           .finally(() => {
             this.processing.sensitiveData = false
           })

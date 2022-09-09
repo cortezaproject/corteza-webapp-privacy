@@ -141,7 +141,7 @@ export default {
         .then(({ set = [] }) => {
           this.connections = set
         })
-        .catch(this.toastErrorHandler(this.$t('Failed to load connections')))
+        .catch(this.toastErrorHandler(this.$t('notification:connection-load-failed')))
         .finally(() => {
           this.processing = false
         })
