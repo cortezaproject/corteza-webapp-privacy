@@ -74,6 +74,7 @@ export default (options = {}) => {
       'dashboard',
       'data-overview',
       'general',
+      'map',
       'navigation',
       'notification',
       'request',

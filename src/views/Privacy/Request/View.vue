@@ -35,7 +35,7 @@
             size-confirm="lg"
             @confirmed="handleRequest('canceled')"
           >
-            Cancel Request
+            {{ $t('cancel') }}
           </c-input-confirm>
 
           <c-input-confirm

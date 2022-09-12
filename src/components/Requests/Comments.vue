@@ -6,24 +6,24 @@
   >
     <template #header>
       <h5 class="d-flex align-items-center justify-content-between mb-0">
-        {{ 'Comments' }}
+        {{ $t('label') }}
 
         <b-dropdown
           variant="link"
           toggle-class="text-muted text-decoration-none"
-          :text="sort.includes('DESC') ? 'Newest first' : 'Oldest first'"
+          :text="sort.includes('DESC') ? $t('sort.first.newest') : $t('sort.first.oldest')"
         >
           <b-dropdown-item
             :disabled="sort.includes('DESC')"
             @click="$emit('sort', 'createdAt DESC')"
           >
-            Newest first
+            {{ $t('sort.first.newest') }}
           </b-dropdown-item>
           <b-dropdown-item
             :disabled="!sort.includes('DESC')"
             @click="$emit('sort', 'createdAt')"
           >
-            Oldest first
+            {{ $t('sort.first.oldest') }}
           </b-dropdown-item>
         </b-dropdown>
       </h5>
@@ -35,7 +35,7 @@
       <b-form-textarea
         id="textarea"
         v-model="comment"
-        placeholder="Enter comment..."
+        :placeholder="$t('enter')"
         rows="2"
         class="mb-2"
       />
@@ -45,7 +45,7 @@
         class="ml-auto"
         @click="submitComment()"
       >
-        Submit
+        {{ $t('submit') }}
       </b-button>
     </div>
 
@@ -59,7 +59,7 @@
     >
       <div class="d-flex align-items-center flex-wrap border p-2">
         <h6 class="text-primary mb-0">
-          {{ formattedUsers[c.createdBy] || 'Unknown user' }}
+          {{ formattedUsers[c.createdBy] || $t('unknown.user') }}
         </h6>
         <span class="ml-auto text-muted">
           {{ formatDate(c.createdAt) }}
@@ -78,6 +78,11 @@
 import { fmt, NoID } from '@cortezaproject/corteza-js'
 
 export default {
+  i18nOptions: {
+    namespaces: 'request',
+    keyPrefix: 'comments',
+  },
+
   props: {
     comments: {
       type: Array,
@@ -116,7 +121,7 @@ export default {
     },
 
     formatDate (date) {
-      return date ? fmt.fullDateTime(date.toLocaleString()) : 'Unknown date'
+      return date ? fmt.fullDateTime(date.toLocaleString()) : this.$t('unknown.date')
     },
 
     formatUsers (comments = []) {

@@ -21,17 +21,17 @@
         <h5
           class="text-primary"
         >
-          Server Details
+          $t('server-details')
         </h5>
         <b-form-group
-          label="Name"
+          label="$t('name')"
           label-class="text-primary"
         >
           {{ connection.name }}
         </b-form-group>
 
         <b-form-group
-          label="Location"
+          label="$t('location')"
           label-class="text-primary"
         >
           {{ getLocationName(connection) }}
@@ -46,6 +46,10 @@ import { latLng } from 'leaflet'
 import { LMap, LTileLayer, LMarker, LTooltip } from 'vue2-leaflet'
 
 export default {
+  i18nOptions: {
+    namespaces: 'map',
+  },
+
   components: {
     LMap,
     LTileLayer,

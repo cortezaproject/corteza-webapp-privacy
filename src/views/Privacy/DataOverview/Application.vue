@@ -37,7 +37,7 @@
       v-else-if="!(connection && modules[connection.connectionID])"
       class="text-center mt-5"
     >
-      No data available
+      {{ $t('no-data-available') }}
     </h5>
 
     <div

@@ -67,7 +67,7 @@
             size-confirm="lg"
             @confirmed="handleSelectedRequests(selected, 'canceled')"
           >
-            Cancel Request
+            {{ $t('request.cancel') }}
           </c-input-confirm>
 
           <!-- <b-button
