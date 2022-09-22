@@ -16,7 +16,9 @@
         {{ $t('description.second') }}
       </p>
 
-      <b-row>
+      <b-row
+        align-v="stretch"
+      >
         <b-col
           v-for="option in options"
           :key="option.title"
@@ -27,9 +29,10 @@
         >
           <b-card
             :title="option.title"
-            class="card-hover-popup shadow-sm"
+            class="card-hover-popup shadow-sm h-100"
+            body-class="d-flex flex-column"
           >
-            <b-card-text>
+            <b-card-text class="flex-grow-1">
               {{ option.description }}
             </b-card-text>
 
@@ -50,7 +53,7 @@
       <h6
         class="text-primary"
       >
-        {{ $t('data-source-location') }}
+        {{ $t('connection-location') }}
       </h6>
 
       <connection-map

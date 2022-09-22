@@ -6,7 +6,7 @@
       class="shadow-sm mb-4"
     >
       <b-form-group
-        :label="$t('data-source.label')"
+        :label="$t('connection.label')"
         label-class="text-primary"
         class="mb-0"
       >
@@ -16,7 +16,7 @@
           :options="connections"
           :clearable="false"
           :get-option-label="({ handle, meta }) => meta.name || handle"
-          :placeholder="$t('data-source.placeholder')"
+          :placeholder="$t('connection.placeholder')"
           class="h-100 bg-white"
         />
       </b-form-group>
@@ -36,63 +36,28 @@
       {{ $t('no-data-available') }}
     </h5>
 
-    <div
+    <module-records
       v-else
+      v-slot="{ namespace, module, record, value }"
+      :modules="modules[connection.connectionID]"
     >
-      <b-card
-        v-for="(m, mi) in modules[connection.connectionID]"
-        :key="m.moduleID"
-        header-class="bg-white border-bottom text-primary"
-        class="shadow-sm"
-        :class="{ 'mt-3': !!mi }"
-      >
-        <template #header>
-          <h5
-            class="mb-0"
-          >
-            {{ m.module }}
-          </h5>
-        </template>
+      <template v-if="value.value.length">
+        <b-form-input
+          v-for="(v, vi) in value.value"
+          :key="vi"
+          :value="v"
+          class="mb-1"
+          @update="updateValue({ namespace, module, recordID: record.recordID, field: value.name, value: $event, orgValue: v })"
+        />
+      </template>
 
-        <b-form-group
-          v-for="(r, ri) in m.records"
-          :key="r.recordID"
-          :label="`RecordID: ${r.recordID}`"
-          label-class="text-muted"
-          class="mb-0"
-        >
-          <b-form-group
-            v-for="value in r.values"
-            :key="value.name"
-            :label="value.name"
-            label-cols="12"
-            label-cols-lg="4"
-            class="mb-1"
-          >
-            <template v-if="value.value.length">
-              <b-form-input
-                v-for="(v, vi) in value.value"
-                :key="vi"
-                :value="v"
-                class="mb-1"
-                @update="updateValue({ moduleID: m.module, recordID: r.recordID, field: value.name, value: $event, orgValue: v })"
-              />
-            </template>
-
-            <b-form-input
-              v-else
-              :value="value.value[0]"
-              class="mb-1"
-              @update="updateValue({ moduleID: m.module, recordID: r.recordID, field: value.name, value: $event, orgValue: null })"
-            />
-          </b-form-group>
-
-          <hr
-            v-if="ri < m.records.length - 1"
-          >
-        </b-form-group>
-      </b-card>
-    </div>
+      <b-form-input
+        v-else
+        :value="value.value[0]"
+        class="mb-1"
+        @update="updateValue({ namespace, module, recordID: record.recordID, field: value.name, value: $event, orgValue: null })"
+      />
+    </module-records>
 
     <portal to="editor-toolbar">
       <editor-toolbar
@@ -109,6 +74,7 @@
 
 <script>
 import EditorToolbar from 'corteza-webapp-privacy/src/components/Common/EditorToolbar'
+import ModuleRecords from 'corteza-webapp-privacy/src/components/Common/ModuleRecords'
 import VueSelect from 'vue-select'
 
 export default {
@@ -118,8 +84,9 @@ export default {
   },
 
   components: {
-    EditorToolbar,
     VueSelect,
+    EditorToolbar,
+    ModuleRecords,
   },
 
   data () {
@@ -189,8 +156,10 @@ export default {
       }
     },
 
-    updateValue ({ moduleID, recordID, field, value, orgValue }) {
+    updateValue ({ namespace, module, recordID, field, value, orgValue }) {
       const { connectionID } = this.connection
+      const { namespaceID, name: namespaceName } = namespace
+      const { moduleID, name: moduleName } = module
 
       if (value === orgValue) {
         delete this.payload.modules[moduleID].records[recordID].values[field]
@@ -200,6 +169,10 @@ export default {
       if (connectionID) {
         if (!this.payload.modules[moduleID]) {
           this.payload.modules[moduleID] = {
+            namespace: namespaceName,
+            namespaceID,
+            module: moduleName,
+            moduleID,
             records: {},
           }
         }

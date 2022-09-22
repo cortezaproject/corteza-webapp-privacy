@@ -21,17 +21,17 @@
         <h5
           class="text-primary"
         >
-          $t('server-details')
+          {{ $t('server-details') }}
         </h5>
         <b-form-group
-          label="$t('name')"
+          :label="$t('name')"
           label-class="text-primary"
         >
-          {{ connection.name }}
+          {{ connection.meta.name }}
         </b-form-group>
 
         <b-form-group
-          label="$t('location')"
+          :label="$t('location')"
           label-class="text-primary"
         >
           {{ getLocationName(connection) }}
@@ -75,21 +75,24 @@ export default {
 
   computed: {
     validMarkers () {
-      return this.connections.filter(({ location = {} }) => {
+      return this.connections.filter(({ meta = {} }) => {
+        const { location = {} } = meta
         const { geometry = {} } = location
-        return !!geometry.coordinates
+        const { coordinates = [] } = geometry
+        return !!coordinates.length
       })
     },
   },
 
   methods: {
-    getLocationCoordinates ({ location = {} }) {
+    getLocationCoordinates ({ meta = {} }) {
+      const { location = {} } = meta
       const { geometry = {} } = location
       return this.getLatLng(geometry.coordinates)
     },
 
     getLocationName (connection) {
-      return connection.location.properties.name || 'Unnamed location'
+      return connection.meta.location.properties.name || 'Unnamed location'
     },
 
     getLatLng (coordinates = [0, 0]) {

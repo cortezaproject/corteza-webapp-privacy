@@ -6,7 +6,7 @@
       class="shadow-sm mb-3"
     >
       <b-form-group
-        :label="$t('data-source.label')"
+        :label="$t('connection.label')"
         label-class="text-primary"
         class="mb-0"
       >
@@ -16,7 +16,7 @@
           :options="connections"
           :clearable="false"
           :get-option-label="({ handle, meta }) => meta.name || handle"
-          :placeholder="$t('data-source.placeholder')"
+          :placeholder="$t('connection.placeholder')"
           class="h-100 bg-white"
         />
       </b-form-group>
@@ -36,69 +36,34 @@
       {{ $t('no-data-available') }}
     </h5>
 
-    <div
+    <module-records
       v-else
+      v-slot="{ namespace, module, record, value }"
+      :modules="modules[connection.connectionID]"
     >
-      <b-card
-        v-for="(m, mi) in modules[connection.connectionID]"
-        :key="m.moduleID"
-        header-class="bg-white border-bottom text-primary"
-        class="shadow-sm"
-        :class="{ 'mt-3': !!mi }"
+      <b-form-checkbox
+        v-if="value.value.length"
+        v-model="value.selected"
+        @change="updateValue({ namespace, module, recordID: record.recordID, field: value.name, selected: $event, orgValue: value.value })"
       >
-        <template #header>
-          <h5
-            class="mb-0"
-          >
-            {{ m.module }}
-          </h5>
-        </template>
-
-        <b-form-group
-          v-for="(r, ri) in m.records"
-          :key="r.recordID"
-          :label="`RecordID: ${r.recordID}`"
-          label-class="text-muted"
-          class="mb-0"
+        <span
+          v-for="(v, vi) in value.value"
+          :key="vi"
+          class="py-2 mb-0"
         >
-          <b-form-group
-            v-for="value in r.values"
-            :key="value.name"
-            :label="value.name"
-            label-cols="12"
-            label-cols-lg="4"
-            class="mb-1"
+          <del
+            v-if="value.selected"
           >
-            <b-form-checkbox
-              v-if="value.value.length"
-              v-model="value.selected"
-              @change="updateValue({ moduleID: m.module, recordID: r.recordID, field: value.name, selected: $event, orgValue: value.value })"
-            >
-              <span
-                v-for="(v, vi) in value.value"
-                :key="vi"
-                class="py-2 mb-0"
-              >
-                <del
-                  v-if="value.selected"
-                >
-                  {{ v }}
-                </del>
-                <span
-                  v-else
-                >
-                  {{ v }}
-                </span>
-              </span>
-            </b-form-checkbox>
-          </b-form-group>
-
-          <hr
-            v-if="ri < m.records.length - 1"
+            {{ v }}
+          </del>
+          <span
+            v-else
           >
-        </b-form-group>
-      </b-card>
-    </div>
+            {{ v }}
+          </span>
+        </span>
+      </b-form-checkbox>
+    </module-records>
 
     <portal to="editor-toolbar">
       <editor-toolbar
@@ -117,6 +82,7 @@
 
 <script>
 import EditorToolbar from 'corteza-webapp-privacy/src/components/Common/EditorToolbar'
+import ModuleRecords from 'corteza-webapp-privacy/src/components/Common/ModuleRecords'
 import VueSelect from 'vue-select'
 
 export default {
@@ -126,8 +92,9 @@ export default {
   },
 
   components: {
-    EditorToolbar,
     VueSelect,
+    EditorToolbar,
+    ModuleRecords,
   },
 
   data () {
@@ -197,10 +164,12 @@ export default {
       }
     },
 
-    updateValue ({ moduleID, recordID, field, selected, orgValue = [] }) {
+    updateValue ({ namespace, module, recordID, field, value, orgValue = [] }) {
       const { connectionID } = this.connection
+      const { namespaceID, name: namespaceName } = namespace
+      const { moduleID, name: moduleName } = module
 
-      if (!selected) {
+      if (value === orgValue) {
         delete this.payload.modules[moduleID].records[recordID].values[field]
         return
       }
@@ -208,6 +177,10 @@ export default {
       if (connectionID) {
         if (!this.payload.modules[moduleID]) {
           this.payload.modules[moduleID] = {
+            namespace: namespaceName,
+            namespaceID,
+            module: moduleName,
+            moduleID,
             records: {},
           }
         }

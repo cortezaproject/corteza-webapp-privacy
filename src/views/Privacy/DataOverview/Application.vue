@@ -10,7 +10,7 @@
       class="shadow-sm mb-4"
     >
       <b-form-group
-        :label="$t('data-source')"
+        :label="$t('connection.label')"
         label-class="text-primary"
         class="mb-0"
       >
@@ -19,7 +19,7 @@
           :disabled="processing.connections"
           :options="connections"
           :clearable="false"
-          :placeholder="$t('select-data-source')"
+          :placeholder="$t('connection.placeholder')"
           :get-option-label="({ handle, meta }) => meta.name || handle"
           class="h-100 bg-white"
         />
@@ -40,54 +40,20 @@
       {{ $t('no-data-available') }}
     </h5>
 
-    <div
+    <module-records
       v-else
+      v-slot="{ value }"
+      :modules="modules[connection.connectionID]"
     >
-      <b-card
-        v-for="(m, mi) in modules[connection.connectionID]"
-        :key="m.moduleID"
-        header-class="bg-white border-bottom text-primary"
-        class="shadow-sm"
-        :class="{ 'mt-3': !!mi }"
+      <p
+        v-for="(v, vi) in value.value"
+        :key="vi"
+        class="mb-0"
+        :class="{ 'mt-1': vi > 0 }"
       >
-        <template #header>
-          <h5
-            class="mb-0"
-          >
-            {{ m.module }}
-          </h5>
-        </template>
-
-        <b-form-group
-          v-for="(r, ri) in m.records"
-          :key="r.recordID"
-          :label="`RecordID: ${r.recordID}`"
-          label-class="text-muted"
-          class="mb-0"
-        >
-          <b-form-group
-            v-for="value in r.values"
-            :key="value.name"
-            :label="value.name"
-            label-cols="12"
-            label-cols-lg="4"
-            class="mb-1"
-          >
-            <p
-              v-for="(v, vi) in value.value"
-              :key="vi"
-              class="py-2 mb-0"
-            >
-              {{ v }}
-            </p>
-          </b-form-group>
-
-          <hr
-            v-if="ri < m.records.length - 1"
-          >
-        </b-form-group>
-      </b-card>
-    </div>
+        {{ v }}
+      </p>
+    </module-records>
 
     <portal to="editor-toolbar">
       <editor-toolbar
@@ -106,6 +72,7 @@
 
 <script>
 import EditorToolbar from 'corteza-webapp-privacy/src/components/Common/EditorToolbar'
+import ModuleRecords from 'corteza-webapp-privacy/src/components/Common/ModuleRecords'
 import VueSelect from 'vue-select'
 
 export default {
@@ -117,8 +84,9 @@ export default {
   },
 
   components: {
-    EditorToolbar,
     VueSelect,
+    EditorToolbar,
+    ModuleRecords,
   },
 
   data () {
