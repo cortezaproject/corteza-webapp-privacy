@@ -63,9 +63,7 @@
         :submit-label="$t('submit')"
         :submit-disabled="!(payload.profile || payload.application)"
         @submit="$emit('submit', { kind: 'export', payload })"
-      >
-        <template #right />
-      </editor-toolbar>
+      />
     </portal>
   </div>
 </template>

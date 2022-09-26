@@ -25,32 +25,30 @@
         :delete-label="$t('reject')"
         @delete="handleRequest('rejected')"
       >
-        <template #right>
-          <c-input-confirm
-            v-if="!isDC"
-            :borderless="false"
-            :disabled="!request || !isPending"
-            variant="light"
-            size="lg"
-            size-confirm="lg"
-            @confirmed="handleRequest('canceled')"
-          >
-            {{ $t('cancel') }}
-          </c-input-confirm>
+        <c-input-confirm
+          v-if="!isDC"
+          :borderless="false"
+          :disabled="!request || !isPending"
+          variant="light"
+          size="lg"
+          size-confirm="lg"
+          @confirmed="handleRequest('canceled')"
+        >
+          {{ $t('cancel') }}
+        </c-input-confirm>
 
-          <c-input-confirm
-            v-else
-            :borderless="false"
-            :disabled="!request || !isPending"
-            variant="primary"
-            size="lg"
-            size-confirm="lg"
-            class="ml-2"
-            @confirmed="handleRequest('approved')"
-          >
-            {{ $t('approve') }}
-          </c-input-confirm>
-        </template>
+        <c-input-confirm
+          v-else
+          :borderless="false"
+          :disabled="!request || !isPending"
+          variant="primary"
+          size="lg"
+          size-confirm="lg"
+          class="ml-2"
+          @confirmed="handleRequest('approved')"
+        >
+          {{ $t('approve') }}
+        </c-input-confirm>
       </editor-toolbar>
     </portal>
   </b-container>

@@ -59,14 +59,27 @@
       <editor-toolbar
         :processing="processing.connections || processing.sensitiveData"
         :back-link="{ name: 'data-overview' }"
-        delete-show
-        :delete-confirm="false"
-        :delete-label="$t('request-deletion')"
-        submit-show
-        :submit-label="$t('request-correction')"
-        @submit="$router.push({ name: 'request.create', params: { kind: 'correct'} })"
-        @delete="$router.push({ name: 'request.create', params: { kind: 'delete'} })"
-      />
+      >
+        <b-button
+          :disabled="processing.connections || processing.sensitiveData"
+          variant="light"
+          size="lg"
+          class="ml-1"
+          @click="$router.push({ name: 'request.create', params: { kind: 'delete', connection } })"
+        >
+          {{ $t('request-deletion') }}
+        </b-button>
+
+        <b-button
+          :disabled="processing.connections || processing.sensitiveData"
+          variant="primary"
+          size="lg"
+          class="ml-1"
+          @click="$router.push({ name: 'request.create', params: { kind: 'correct', connection } })"
+        >
+          {{ $t('request-correction') }}
+        </b-button>
+      </editor-toolbar>
     </portal>
   </b-container>
 </template>

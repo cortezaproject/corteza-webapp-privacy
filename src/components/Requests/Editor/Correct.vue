@@ -55,7 +55,7 @@
         v-else
         :value="value.value[0]"
         class="mb-1"
-        @update="updateValue({ namespace, module, recordID: record.recordID, field: value.name, value: $event, orgValue: null })"
+        @update="updateValue({ namespace, module, recordID: record.recordID, field: value.name, value: $event, orgValue: '' })"
       />
     </module-records>
 
@@ -65,7 +65,7 @@
         :back-link="{ name: 'data-overview.application' }"
         submit-show
         :submit-label="$t('submit')"
-        :submit-disabled="!connection"
+        :submit-disabled="!valid || !connection"
         @submit="$emit('submit', { kind: 'correct', payload })"
       />
     </portal>
@@ -103,6 +103,7 @@ export default {
       modules: {},
 
       payload: {},
+      valid: false,
     }
   },
 
@@ -125,7 +126,11 @@ export default {
       this.$SystemAPI.dataPrivacyConnectionList()
         .then(({ set = [] }) => {
           this.connections = set
-          this.connection = set[0]
+          if (!this.$route.params.connection) {
+            this.connection = set[0]
+          } else {
+            this.connection = this.$route.params.connection
+          }
         })
         .catch(this.toastErrorHandler(this.$t('notification:connection-load-failed')))
         .finally(() => {
@@ -163,6 +168,17 @@ export default {
 
       if (value === orgValue) {
         delete this.payload.modules[moduleID].records[recordID].values[field]
+
+        if (Object.keys(this.payload.modules[moduleID].records[recordID].values).length === 0) {
+          delete this.payload.modules[moduleID].records[recordID]
+
+          if (Object.keys(this.payload.modules[moduleID].records).length === 0) {
+            delete this.payload.modules[moduleID]
+          }
+        }
+
+        this.valid = Object.keys(this.payload.modules).length > 0
+
         return
       }
 
@@ -184,6 +200,7 @@ export default {
         }
 
         this.payload.modules[moduleID].records[recordID].values[field] = [value]
+        this.valid = true
       }
     },
   },

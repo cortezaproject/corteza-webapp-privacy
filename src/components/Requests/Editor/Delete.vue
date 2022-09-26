@@ -44,7 +44,7 @@
       <b-form-checkbox
         v-if="value.value.length"
         v-model="value.selected"
-        @change="updateValue({ namespace, module, recordID: record.recordID, field: value.name, selected: $event, orgValue: value.value })"
+        @change="updateValue({ namespace, module, recordID: record.recordID, field: value.name, value: $event, orgValue: value.value })"
       >
         <span
           v-for="(v, vi) in value.value"
@@ -71,11 +71,9 @@
         :back-link="{ name: 'data-overview.application' }"
         submit-show
         :submit-label="$t('submit')"
-        :submit-disabled="!connection"
+        :submit-disabled="!valid || !connection"
         @submit="$emit('submit', { kind: 'delete', payload })"
-      >
-        <template #right />
-      </editor-toolbar>
+      />
     </portal>
   </div>
 </template>
@@ -111,6 +109,7 @@ export default {
       modules: {},
 
       payload: {},
+      valid: false,
     }
   },
 
@@ -133,7 +132,11 @@ export default {
       this.$SystemAPI.dataPrivacyConnectionList()
         .then(({ set = [] }) => {
           this.connections = set
-          this.connection = set[0]
+          if (!this.$route.params.connection) {
+            this.connection = set[0]
+          } else {
+            this.connection = this.$route.params.connection
+          }
         })
         .catch(this.toastErrorHandler(this.$t('notification:connection-load-failed')))
         .finally(() => {
@@ -169,8 +172,19 @@ export default {
       const { namespaceID, name: namespaceName } = namespace
       const { moduleID, name: moduleName } = module
 
-      if (value === orgValue) {
+      if (!value) {
         delete this.payload.modules[moduleID].records[recordID].values[field]
+
+        if (Object.keys(this.payload.modules[moduleID].records[recordID].values).length === 0) {
+          delete this.payload.modules[moduleID].records[recordID]
+
+          if (Object.keys(this.payload.modules[moduleID].records).length === 0) {
+            delete this.payload.modules[moduleID]
+          }
+        }
+
+        this.valid = Object.keys(this.payload.modules).length > 0
+
         return
       }
 
@@ -192,6 +206,7 @@ export default {
         }
 
         this.payload.modules[moduleID].records[recordID].values[field] = orgValue
+        this.valid = true
       }
     },
   },

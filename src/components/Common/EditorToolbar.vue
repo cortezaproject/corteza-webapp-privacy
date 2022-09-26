@@ -71,7 +71,7 @@
           {{ submitLabel }}
         </b-button>
 
-        <slot name="right" />
+        <slot />
       </b-col>
     </b-row>
   </b-container>
