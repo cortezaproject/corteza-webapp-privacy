@@ -79,7 +79,8 @@ export default {
         const { location = {} } = meta
         const { geometry = {} } = location
         const { coordinates = [] } = geometry
-        return !!coordinates.length
+
+        return coordinates && !!coordinates.length
       })
     },
   },
@@ -92,7 +93,7 @@ export default {
     },
 
     getLocationName (connection) {
-      return connection.meta.location.properties.name || 'Unnamed location'
+      return connection.meta.location.properties.name || this.$t('unnamed-location')
     },
 
     getLatLng (coordinates = [0, 0]) {
