@@ -24,6 +24,7 @@
         prevPagination: $t('general:resourceList.pagination.prev'),
         nextPagination: $t('general:resourceList.pagination.next'),
       }"
+      :is-item-selectable="isItemSelectable"
       selectable
       clickable
       hide-total
@@ -224,6 +225,10 @@ export default {
             this.users[user.userID] = user
           })
         })
+    },
+
+    isItemSelectable (item) {
+      return item.status === 'pending'
     },
 
     formatUser (userID) {

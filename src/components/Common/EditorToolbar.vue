@@ -34,18 +34,31 @@
       <b-col
         class="d-flex justify-content-end"
       >
-        <c-input-confirm
-          v-if="deleteShow"
-          :disabled="deleteDisabled || processing"
-          :borderless="false"
-          variant="danger"
-          size="lg"
-          size-confirm="lg"
-          class="ml-1"
-          @confirmed="$emit('delete')"
-        >
-          {{ deleteLabel }}
-        </c-input-confirm>
+        <template v-if="deleteShow">
+          <c-input-confirm
+            v-if="deleteConfirm"
+            :disabled="deleteDisabled || processing"
+            :borderless="false"
+            variant="danger"
+            size="lg"
+            size-confirm="lg"
+            class="ml-1"
+            @confirmed="$emit('delete')"
+          >
+            {{ deleteLabel }}
+          </c-input-confirm>
+
+          <b-button
+            v-else
+            :disabled="deleteDisabled || processing"
+            variant="danger"
+            size="lg"
+            class="ml-1"
+            @click="$emit('delete')"
+          >
+            {{ deleteLabel }}
+          </b-button>
+        </template>
 
         <b-button
           v-if="submitShow"
@@ -85,6 +98,11 @@ export default {
     deleteDisabled: {
       type: Boolean,
       required: false,
+    },
+
+    deleteConfirm: {
+      type: Boolean,
+      default: true,
     },
 
     deleteLabel: {

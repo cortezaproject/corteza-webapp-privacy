@@ -60,6 +60,7 @@
         :processing="processing.connections || processing.sensitiveData"
         :back-link="{ name: 'data-overview' }"
         delete-show
+        :delete-confirm="false"
         :delete-label="$t('request-deletion')"
         submit-show
         :submit-label="$t('request-correction')"
