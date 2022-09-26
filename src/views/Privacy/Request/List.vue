@@ -132,7 +132,7 @@ export default {
 
       sorting: {
         sortBy: 'requestedAt',
-        sortDesc: false,
+        sortDesc: true,
       },
 
       statusVariants: {
