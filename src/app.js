@@ -75,6 +75,7 @@ export default (options = {}) => {
       'data-overview',
       'general',
       'map',
+      'module-records',
       'navigation',
       'notification',
       'request',

@@ -10,14 +10,14 @@
     >
       <template #header>
         <b-form-group
-          label="Module"
+          :label="$t('module')"
           label-class="text-primary"
           class="mb-0"
         >
           {{ m.module }}
         </b-form-group>
         <b-form-group
-          label="Namespace"
+          :label="$t('namespace')"
           label-class="text-primary"
           class="mb-0"
         >
@@ -29,7 +29,7 @@
         v-if="!m.records.length"
         class="text-center"
       >
-        No records
+        {{ $t('no-records') }}
       </h6>
 
       <div
@@ -76,6 +76,10 @@
 
 <script>
 export default {
+  i18nOptions: {
+    namespaces: 'module-records',
+  },
+
   props: {
     modules: {
       type: Array,
