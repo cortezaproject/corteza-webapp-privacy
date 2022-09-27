@@ -106,7 +106,7 @@ export default {
     },
 
     rowClicked ({ namespace, module }) {
-      window.open(`${window.location.origin}/compose/ns/${namespace.slug}/admin/modules/${module.moduleID}/edit`, '_blank')
+      window.open(`/compose/ns/${namespace.slug}/admin/modules/${module.moduleID}/edit`, '_blank')
     },
   },
 }
