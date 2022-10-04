@@ -1,6 +1,5 @@
 <template>
   <b-card
-    v-if="!processing"
     header-class="bg-white border-bottom"
     class="shadow-sm"
   >
@@ -49,28 +48,44 @@
       </b-button>
     </div>
 
-    <hr v-if="comments.length">
+    <hr v-if="comments.length || processing">
 
     <div
-      v-for="(c, index) in comments"
-      :key="c.commentID"
-      :class="{ 'mt-3': index }"
-      class="overflow-auto"
+      v-if="processing"
+      class="d-flex align-items-center justify-content-center py-3"
     >
-      <div class="d-flex align-items-center flex-wrap border p-2">
-        <h6 class="text-primary mb-0">
-          {{ formattedUsers[c.createdBy] || $t('unknown.user') }}
-        </h6>
-        <span class="ml-auto text-muted">
-          {{ formatDate(c.createdAt) }}
-        </span>
-      </div>
-      <div
-        class="border p-3"
-      >
-        {{ c.comment }}
-      </div>
+      <b-spinner />
     </div>
+
+    <template v-else>
+      <div
+        v-for="(c, index) in comments"
+        :key="c.commentID"
+        :class="{ 'mt-3': index }"
+        class="overflow-auto"
+      >
+        <div class="d-flex align-items-center flex-wrap border p-2">
+          <h6 class="text-primary mb-0">
+            <b-spinner
+              v-if="formatting"
+              small
+            />
+
+            <span v-else>
+              {{ formattedUsers[c.createdBy] || $t('unknown.user') }}
+            </span>
+          </h6>
+          <span class="ml-auto text-muted">
+            {{ formatDate(c.createdAt) }}
+          </span>
+        </div>
+        <div
+          class="border p-3"
+        >
+          {{ c.comment }}
+        </div>
+      </div>
+    </template>
   </b-card>
 </template>
 
@@ -89,6 +104,11 @@ export default {
       required: true,
     },
 
+    processing: {
+      type: Boolean,
+      required: true,
+    },
+
     sort: {
       type: String,
       required: true,
@@ -97,10 +117,9 @@ export default {
 
   data () {
     return {
-      processing: false,
-
       comment: '',
 
+      formatting: false,
       formattedUsers: {},
     }
   },
@@ -134,16 +153,16 @@ export default {
       })
 
       if (userID.length) {
-        this.processing = true
+        this.formatting = true
 
         this.$SystemAPI.userList({ userID })
           .then(({ set }) => {
             set.forEach(({ userID, name, username, email, handle }) => {
-              this.formattedUsers[userID] = name || username || email || handle || userID || ''
+              this.$set(this.formattedUsers, userID, name || username || email || handle || userID || '')
             })
           })
           .finally(() => {
-            this.processing = false
+            this.formatting = false
           })
       }
     },

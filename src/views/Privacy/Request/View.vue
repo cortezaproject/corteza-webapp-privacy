@@ -2,23 +2,31 @@
   <b-container
     class="d-flex flex-column p-3"
   >
-    <request-viewer
-      v-if="request"
-      :request="request"
-      class="mb-3"
-    />
+    <div
+      v-if="processing.request"
+      class="d-flex align-items-center justify-content-center h-100"
+    >
+      <b-spinner />
+    </div>
 
-    <request-comments
-      v-if="request"
-      :comments="comments"
-      :sort="sort"
-      @sort="sort = $event"
-      @submit="submitComment"
-    />
+    <template v-else-if="request">
+      <request-viewer
+        :request="request"
+        class="mb-3"
+      />
+
+      <request-comments
+        :comments="comments"
+        :processing="processing.comments"
+        :sort="sort"
+        @sort="sort = $event"
+        @submit="submitComment"
+      />
+    </template>
 
     <portal to="editor-toolbar">
       <editor-toolbar
-        :processing="processing"
+        :processing="processing.toolbar"
         :back-link="{ name: 'request.list' }"
         :delete-show="isDC"
         :delete-disabled="!request || !isPending"
@@ -83,7 +91,11 @@ export default {
 
   data () {
     return {
-      processing: false,
+      processing: {
+        comments: false,
+        request: false,
+        toolbar: false,
+      },
 
       isDC: null,
 
@@ -133,7 +145,7 @@ export default {
     },
 
     fetchRequest (requestID = this.requestID) {
-      this.processing = true
+      this.processing.request = true
 
       return this.$SystemAPI.dataPrivacyRequestRead({ requestID })
         .then(request => {
@@ -141,12 +153,12 @@ export default {
         })
         .catch(this.toastErrorHandler(this.$t('notification:list.load.error')))
         .finally(() => {
-          this.processing = false
+          this.processing.request = false
         })
     },
 
     fetchComments (requestID = this.requestID) {
-      this.processing = true
+      this.processing.comments = true
 
       return this.$SystemAPI.dataPrivacyRequestCommentList({ requestID, sort: this.sort })
         .then(({ set }) => {
@@ -154,31 +166,31 @@ export default {
         })
         .catch(this.toastErrorHandler(this.$t('notification:list.load.error')))
         .finally(() => {
-          this.processing = false
+          this.processing.comments = false
         })
     },
 
     handleRequest (status) {
-      this.processing = true
+      this.processing.toolbar = true
 
       this.$SystemAPI.dataPrivacyRequestUpdateStatus({ requestID: this.requestID, status })
         .then(() => {
           this.$router.push({ name: 'request.list' })
         })
         .finally(() => {
-          this.processing = true
+          this.processing.toolbar = false
         })
     },
 
     submitComment (comment) {
-      this.processing = true
+      this.processing.comments = true
 
       this.$SystemAPI.dataPrivacyRequestCommentCreate({ requestID: this.requestID, comment })
         .then(() => {
-          this.fetchComments()
+          return this.fetchComments()
         })
         .finally(() => {
-          this.processing = true
+          this.processing.comments = false
         })
     },
   },
