@@ -16,6 +16,7 @@
       :sorting="sorting"
       :pagination="pagination"
       :translations="{
+        notFound: $t('general:resourceList.notFound'),
         noItems: $t('general:resourceList.noItems'),
         loading: $t('general:resourceList.loading'),
         searchPlaceholder: $t('general:resourceList.search.placeholder'),
@@ -191,6 +192,21 @@ export default {
 
           this.isDC = !!set.length
         })
+    },
+
+    encodeRouteParams () {
+      const { query } = this.filter
+      const { limit, pageCursor, page } = this.pagination
+
+      return {
+        query: {
+          limit,
+          ...this.sorting,
+          query,
+          page,
+          pageCursor,
+        },
+      }
     },
 
     items () {
