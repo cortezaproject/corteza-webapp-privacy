@@ -140,7 +140,7 @@ export default {
     fetchConnections () {
       this.processing = true
 
-      this.$SystemAPI.dalConnectionList()
+      this.$SystemAPI.dataPrivacyConnectionList()
         .then(({ set = [] }) => {
           this.connections = set
         })
