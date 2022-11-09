@@ -21,7 +21,7 @@
         loading: $t('general:resourceList.loading'),
         searchPlaceholder: $t('general:resourceList.search.placeholder'),
         showingPagination: 'general:resourceList.pagination.showing',
-        singlePluralPagination: 'general:resourceList.pagination.single_plural',
+        singlePluralPagination: 'general:resourceList.pagination.single',
         prevPagination: $t('general:resourceList.pagination.prev'),
         nextPagination: $t('general:resourceList.pagination.next'),
       }"
